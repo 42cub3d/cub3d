@@ -4,7 +4,12 @@ LMLX=-L./minilibx -lmlx -framework OpenGL -framework AppKit
 LIBFT=./libft/libft.a
 HEADER=-I./header
 NAME=cub3d
-SRCS=./src/main.c
+SRCS=./src/main.c\
+		./src/str_utils.c\
+		./src/key_hook.c\
+		./src/draw_map.c\
+		./src/map_parsing_init.c\
+		./src/cub3d_utils.c
 OBJS=$(SRCS:.c=.o)
 
 all: $(NAME)

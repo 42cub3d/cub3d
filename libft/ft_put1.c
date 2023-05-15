@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_put1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 21:40:13 by subcho            #+#    #+#             */
-/*   Updated: 2023/01/30 18:06:51 by subcho           ###   ########.fr       */
+/*   Updated: 2023/05/15 17:26:12 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,21 @@ int	ft_putchar(char c)
 	return (1);
 }
 
-int	ft_putstr(char *s)
-{
-	int	count;
+//int	ft_putstr(char *s)
+//{
+//	int	count;
 
-	count = 0;
-	if (!s)
-		return (write(1, &"(null)", 6));
-	while (s[count])
-	{
-		if (write(1, &s[count], 1) == -1)
-			return (-1);
-		count++;
-	}
-	return (count);
-}
+//	count = 0;
+//	if (!s)
+//		return (write(1, &"(null)", 6));
+//	while (s[count])
+//	{
+//		if (write(1, &s[count], 1) == -1)
+//			return (-1);
+//		count++;
+//	}
+//	return (count);
+//}
 
 int	ft_putaddress(void *v)
 {
