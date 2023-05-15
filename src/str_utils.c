@@ -6,11 +6,17 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 22:45:08 by gkwon             #+#    #+#             */
-/*   Updated: 2023/05/14 22:45:49 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/05/15 17:27:11 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/cub3d.h"
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	while (*s)
+		write(fd, s++, 1);
+}
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {

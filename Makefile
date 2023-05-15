@@ -7,7 +7,9 @@ NAME=cub3d
 SRCS=./src/main.c\
 		./src/str_utils.c\
 		./src/key_hook.c\
-		./src/draw_map.c
+		./src/draw_map.c\
+		./src/map_parsing_init.c\
+		./src/cub3d_utils.c
 OBJS=$(SRCS:.c=.o)
 
 all: $(NAME)

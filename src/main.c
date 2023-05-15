@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/05/14 23:00:53 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/05/15 17:57:15 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,39 +19,6 @@ void	drow_window(t_map *map)
 	//mlx_hook(map->window, X_EVENT_KEY_PRESS, 0, press_key, map);
 	//mlx_hook(map->window, X_EVENT_KEY_EXIT, 0, exit_game, map);
 	mlx_loop(map->mlx);
-}
-
-void	init_map(t_map *map, int fd, int cnt)
-{
-	char	*line;
-
-	line = get_next_line(fd);
-	if (cnt == 0 && !line)
-		ft_error(PARSINGERR);
-	if (cnt == 0)
-		map->x = ft_strlen(line) - 1;
-	if (!line)
-	{
-		map->map_char = malloc(sizeof(char *) * (cnt + 1));
-		map->y = cnt;
-	}
-	if (line)
-		init_map(map, fd, cnt + 1);
-	map->map_char[cnt] = line;
-}
-
-void	ft_putstr_fd(char *s, int fd)
-{
-	while (*s)
-		write(fd, s++, 1);
-}
-
-void	ft_error(char *strerr)
-{
-	ft_putstr_fd("ERROR : ", 2);
-	ft_putstr_fd(strerr, 2);
-	ft_putstr_fd("\n", 2);
-	exit(1);
 }
 
 int	valid_argv(char **argv)
@@ -75,7 +42,7 @@ int	map_valid_check(t_map *map, unsigned int i, unsigned int j)
 		j = -1;
 		while (map->map_char[i][++j])
 		{
-			if ((i == 0 || i == map->y) || (j == 0 || j == map->x))
+			if ((i == 0 || i == map->y) || (j == 0 || j == ft_strlen(map->map_char[i])))
 				if (map->map_char[i][j] != 1)
 					return (1);
 			if (map->map_char[i][j] == 'N' ||
@@ -114,7 +81,7 @@ int	main(int argc, char **argv)
 	map.mlx = mlx_init();
 	if (!map.mlx)
 		return (0);
-	map.window = mlx_new_window(map.mlx, 64 * map.x, 64 * map.y, "cub3d");
+	map.window = mlx_new_window(map.mlx, 64, 64, "cub3d");
 	if (!map.window)
 		return (0);
 	drow_window(&map);
