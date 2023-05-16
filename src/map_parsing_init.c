@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parsing_init.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:29:27 by gkwon             #+#    #+#             */
-/*   Updated: 2023/05/15 17:52:14 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/05/16 16:10:50 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,18 @@ int	init_arg(t_map *map, int i)
 {
 	char	**tmp_rgb;
 
-	map->img->n_wall = ft_strdup(map->map_argv[0][1]);
-	map->img->s_wall = ft_strdup(map->map_argv[1][1]);
-	map->img->w_wall = ft_strdup(map->map_argv[2][1]);
-	map->img->e_wall = ft_strdup(map->map_argv[3][1]);
+	map->img->n_wall = ft_strdup(map->map_argv[0]);
+	map->img->s_wall = ft_strdup(map->map_argv[1]);
+	map->img->w_wall = ft_strdup(map->map_argv[2]);
+	map->img->e_wall = ft_strdup(map->map_argv[3]);
 	tmp_rgb = ft_split(map->map_argv[4], ',');
 	while (++i < 3)
-		map->floor_color[i] = ft_atio(tmp_rgb[i]);
+		map->floor_color[i] = ft_atoi(tmp_rgb[i]);
 	i = -1;
 	tmp_rgb = ft_split(map->map_argv[5], ',');
 	while (++i < 3)
-		map->ceiling_color[i] = ft_atio(tmp_rgb[i]);
+		map->ceiling_color[i] = ft_atoi(tmp_rgb[i]);
+	return (0);
 }
 
 int	search_arg(t_map *map, int i, int j)
