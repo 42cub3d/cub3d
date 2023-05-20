@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/05/15 17:57:15 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/05/20 20:30:53 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 void	drow_window(t_map *map)
 {
-	init_img(map);
-	draw_map(map, -1);
+	(void)map;
+	//init_img(map);
+	//draw_map(map, -1);
 	//mlx_hook(map->window, X_EVENT_KEY_PRESS, 0, press_key, map);
 	//mlx_hook(map->window, X_EVENT_KEY_EXIT, 0, exit_game, map);
-	mlx_loop(map->mlx);
+	//mlx_loop(map->mlx);
 }
 
 int	valid_argv(char **argv)
@@ -76,6 +77,7 @@ int	main(int argc, char **argv)
 	if (map.fd <= 0)
 		ft_error(E_FD);
 	init_map(&map, map.fd, 0);
+	search_arg(&map, map.y -1, 0);
 	if (!map_valid_check(&map, -1, -1))
 		ft_error(E_MAP_COLSED);
 	map.mlx = mlx_init();
@@ -84,5 +86,5 @@ int	main(int argc, char **argv)
 	map.window = mlx_new_window(map.mlx, 64, 64, "cub3d");
 	if (!map.window)
 		return (0);
-	drow_window(&map);
+	//drow_window(&map);
 }

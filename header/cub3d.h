@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/05/15 22:23:08 by subcho           ###   ########.fr       */
+/*   Updated: 2023/05/20 17:23:33 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdio.h>
 # include <stdbool.h>
 
 # define E_MAP_VAL "MAP ELEMENT IS NOT SUPOSSED TO BE"
@@ -65,7 +66,7 @@ typedef struct s_map
 	int				ceiling_color[3];
 }					t_map;
 
-/* ===============src=============== */
+/* ===============../src=============== */
 
 void	ft_error(char *strerr);
 void	draw_map(t_map *map, unsigned int h);
@@ -78,6 +79,7 @@ void	drow_window(t_map *map);
 int		valid_argv(char **argv);
 int		map_valid_check(t_map *map, unsigned int i, unsigned int j);
 int		init_arg(t_map *map, int i);
+int		search_arg(t_map *map, int i, int j);
 void	init_map(t_map *map, int fd, int cnt);
 void	ft_putstr_fd(char *s, int fd);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
