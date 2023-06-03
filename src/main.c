@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/05/20 20:30:53 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/06/03 20:40:58 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 void	drow_window(t_map *map)
 {
 	(void)map;
-	//init_img(map);
-	//draw_map(map, -1);
-	//mlx_hook(map->window, X_EVENT_KEY_PRESS, 0, press_key, map);
-	//mlx_hook(map->window, X_EVENT_KEY_EXIT, 0, exit_game, map);
-	//mlx_loop(map->mlx);
+	init_img(map);
+	draw_map(map, -1);
+	mlx_hook(map->window, X_EVENT_KEY_PRESS, 0, press_key, map);
+	mlx_hook(map->window, X_EVENT_KEY_EXIT, 0, exit_game, map);
+	mlx_loop(map->mlx);
 }
 
 int	valid_argv(char **argv)
