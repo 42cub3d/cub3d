@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 17:01:43 by gkwon             #+#    #+#             */
-/*   Updated: 2023/05/20 16:42:13 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/06/05 19:34:46 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ void	init_img(t_map *map)
 	int	img_w;
 	int	img_h;
 
-	map->img->w_wall = mlx_xpm_file_to_image(map->mlx, "./img/w_wall.xpm", &img_w,
+	map->img->w_wall = mlx_xpm_file_to_image(map->mlx, map->img->w_wall, &img_w,
 			&img_h);
-	map->img->e_wall = mlx_xpm_file_to_image(map->mlx, "./img/e_wall.xpm", &img_w,
+	map->img->e_wall = mlx_xpm_file_to_image(map->mlx, map->img->e_wall, &img_w,
 			&img_h);
-	map->img->n_wall = mlx_xpm_file_to_image(map->mlx, "./img/n_wall.xpm", &img_w,
+	map->img->n_wall = mlx_xpm_file_to_image(map->mlx, map->img->n_wall, &img_w,
 			&img_h);
-	map->img->s_wall = mlx_xpm_file_to_image(map->mlx, "./img/s_wall.xpm", &img_w,
+	map->img->s_wall = mlx_xpm_file_to_image(map->mlx, map->img->s_wall, &img_w,
 			&img_h);
 }
