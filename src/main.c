@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/05/20 21:40:50 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/06/12 14:47:01 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 void	drow_window(t_map *map)
 {
 	(void)map;
-	//init_img(map);
-	//draw_map(map, -1);
-	//mlx_hook(map->window, X_EVENT_KEY_PRESS, 0, press_key, map);
-	//mlx_hook(map->window, X_EVENT_KEY_EXIT, 0, exit_game, map);
-	//mlx_loop(map->mlx);
+	init_img(map);
+	draw_map(map, -1);
+	mlx_hook(map->window, X_EVENT_KEY_PRESS, 0, press_key, map);
+	mlx_hook(map->window, X_EVENT_KEY_EXIT, 0, exit_game, map);
+	mlx_loop(map->mlx);
 }
 
 int	valid_argv(char **argv)
@@ -57,7 +57,6 @@ int	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 				map->player.x = j;
 				map->player.y = i;
 				map->is_player_in_map = 1;
-				printf("x : %d y : %d", j, i);
 			}
 			else if (map->map_char[i + std][j] != '\n' && map->map_char[i + std][j] != '0'
 					&& map->map_char[i + std][j] != '1')
@@ -89,8 +88,8 @@ int	main(int argc, char **argv)
 	map.mlx = mlx_init();
 	if (!map.mlx)
 		return (0);
-	map.window = mlx_new_window(map.mlx, 64, 64, "cub3d");
+	map.window = mlx_new_window(map.mlx, 640, 480, "cub3d");
 	if (!map.window)
 		return (0);
-	//drow_window(&map);
+	drow_window(&map);
 }

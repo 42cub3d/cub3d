@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 17:01:43 by gkwon             #+#    #+#             */
-/*   Updated: 2023/06/05 19:34:46 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/12 15:51:12 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,26 @@
 
 void	draw_map(t_map *map, unsigned int h)
 {
-	//unsigned int	w;
-
-	(void)map;
 	(void)h;
-	//while (++h < map->y)
-	//{
-	//	w = 0;
-	//	while (w < ft_strlen(map->map_char[w]))
-	//	{
-	//		if (map->map_char[h][w] == '1')
-	//			mlx_put_image_to_window(map->mlx, map->window, map->img->n_wall, w
-	//				* 64, h * 64);
-	//		else if (map->map_char[h][w] == '0')
-	//			mlx_put_image_to_window(map->mlx, map->window, map->img->w_wall, w
-	//				* 64, h * 64);
-	//		w++;
-	//	}
-	//}
+	mlx_put_image_to_window(map->mlx, map->window, map->img->n_wall, 0, 0);
 }
 
 void	init_img(t_map *map)
 {
-	int	img_w;
-	int	img_h;
+	int		img_w;
+	int		img_h;
+	char	*str;
 
-	map->img->w_wall = mlx_xpm_file_to_image(map->mlx, map->img->w_wall, &img_w,
-			&img_h);
-	map->img->e_wall = mlx_xpm_file_to_image(map->mlx, map->img->e_wall, &img_w,
-			&img_h);
-	map->img->n_wall = mlx_xpm_file_to_image(map->mlx, map->img->n_wall, &img_w,
-			&img_h);
-	map->img->s_wall = mlx_xpm_file_to_image(map->mlx, map->img->s_wall, &img_w,
-			&img_h);
+	str = map->img->w_wall;
+	map->img->w_wall = mlx_xpm_file_to_image(map->mlx, str, &img_w, &img_h);
+	free(str);
+	str = map->img->n_wall;
+	map->img->n_wall = mlx_xpm_file_to_image(map->mlx, str, &img_w, &img_h);
+	free(str);
+	str = map->img->s_wall;
+	map->img->s_wall = mlx_xpm_file_to_image(map->mlx, str, &img_w, &img_h);
+	free(str);
+	str = map->img->e_wall;
+	map->img->e_wall = mlx_xpm_file_to_image(map->mlx, str, &img_w, &img_h);
+	free(str);
 }

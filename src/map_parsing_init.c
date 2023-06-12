@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parsing_init.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:29:27 by gkwon             #+#    #+#             */
-/*   Updated: 2023/05/20 20:48:48 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/06/12 14:42:46 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	search_arg(t_map *map, int i, int j)
 		{
 			if (ft_strncmp(map->map_char[i], campass[j], 2) == 0)
 			{
-				map->map_argv[j] = ft_strdup(map->map_char[i] +2);
+				map->map_argv[j] = ft_strtrim(map->map_char[i] + 2, " \n\t\v\f\r");
 				break ;
 			}
 		}
