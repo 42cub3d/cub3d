@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 20:09:46 by subcho            #+#    #+#             */
-/*   Updated: 2023/05/16 16:09:50 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/12 14:43:44 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int		get_len(int n);
 char	*get_result(int n, char *result, int len, int flag);
 char	*ft_itoa(int n);
 int		ft_atoi(const char *str);
+char	*ft_strtrim(char const *s1, char const *set);
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1024

@@ -1,7 +1,7 @@
 CC=cc
 CFLAGS=-Wall -Wextra -Werror
 NAME=libft.a
-SRCS=ft_printf.c ft_put1.c ft_put2.c get_next_line.c get_next_line_utils.c ft_split.c ft_itoa.c ft_atoi.c
+SRCS=ft_printf.c ft_put1.c ft_put2.c get_next_line.c get_next_line_utils.c ft_split.c ft_itoa.c ft_atoi.c ft_strtrim.c
 OBJS=$(SRCS:.c=.o)
 HEADER=-I../header/
 
