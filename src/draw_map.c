@@ -6,16 +6,41 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 17:01:43 by gkwon             #+#    #+#             */
-/*   Updated: 2023/06/12 15:51:12 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/12 19:32:49 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/cub3d.h"
 
-void	draw_map(t_map *map, unsigned int h)
+int		create_rgb(int r, int g, int b)
 {
-	(void)h;
-	mlx_put_image_to_window(map->mlx, map->window, map->img->n_wall, 0, 0);
+	return (r << 16 | g << 8 | b);
+}
+
+void	draw_map(t_map *map)
+{
+	int				c_color;
+	int				f_color;	
+	unsigned int	w;
+	unsigned int	h;
+
+	//mlx_put_image_to_window(map->mlx, map->window, map->img->n_wall, 0, 0);
+	h = 6;
+	c_color = create_rgb(map->ceiling_color[0], map->ceiling_color[1], map->ceiling_color[2]);
+	f_color = create_rgb(map->floor_color[0], map->floor_color[1], map->floor_color[2]);
+	while (h < map->y + 6)
+	{
+		w = 0;
+		while (w < ft_strlen(map->map_char[h]))
+		{
+			if (map->map_char[h][w] == '1') // ceiling
+				mlx_pixel_put(map->mlx, map->window, h, w, c_color);
+			else if (map->map_char[h][w] == '0') // floor
+				mlx_pixel_put(map->mlx, map->window, h, w, f_color);
+			w++;
+		}
+		h++;
+	}
 }
 
 void	init_img(t_map *map)

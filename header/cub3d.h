@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/05/20 21:09:03 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/06/12 19:32:39 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct s_map
 /* ===============../src=============== */
 
 void	ft_error(char *strerr);
-void	draw_map(t_map *map, unsigned int h);
+void	draw_map(t_map *map);
 void	init_img(t_map *map);
 int		exit_game(t_map *map);
 int		press_key(int key_code, t_map *map);
@@ -83,5 +83,6 @@ int		search_arg(t_map *map, int i, int j);
 void	init_map(t_map *map, int fd, int cnt);
 void	ft_putstr_fd(char *s, int fd);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		create_rgb(int r, int g, int b);
 
 #endif

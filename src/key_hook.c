@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_hook.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 04:08:00 by gkwon             #+#    #+#             */
-/*   Updated: 2023/05/14 23:01:43 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/06/12 19:25:58 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,6 @@ void	move(t_map *map, int key)
 		map->map_char[ny][nx] = 'P';
 		map->player.x = nx;
 		map->player.y = ny;
-		draw_map(map, -1);
+		draw_map(map);
 	}
 }
