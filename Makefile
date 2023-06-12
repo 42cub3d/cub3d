@@ -3,7 +3,7 @@ CFLAGS=-Wall -Wextra -Werror -g
 LMLX=-L./minilibx -lmlx -framework OpenGL -framework AppKit
 LIBFT=./libft/libft.a
 HEADER=-I./header
-NAME=cub3d
+NAME=cub3D
 SRCS=./src/main.c\
 		./src/str_utils.c\
 		./src/key_hook.c\

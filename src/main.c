@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/12 14:47:01 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/12 19:12:29 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	drow_window(t_map *map)
 {
 	(void)map;
 	init_img(map);
-	draw_map(map, -1);
+	draw_map(map);
 	mlx_hook(map->window, X_EVENT_KEY_PRESS, 0, press_key, map);
 	mlx_hook(map->window, X_EVENT_KEY_EXIT, 0, exit_game, map);
 	mlx_loop(map->mlx);
