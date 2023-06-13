@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parsing_init.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:29:27 by gkwon             #+#    #+#             */
-/*   Updated: 2023/06/13 16:56:46 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/13 17:25:13 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,6 @@ void	init_map(t_map *map, int fd, int cnt)
 	if (line)
 		init_map(map, fd, cnt + 1);
 	map->map_char[cnt] = line;
+	if ((unsigned int)cnt != map->y && (unsigned int)cnt != map->y -1)
+		map->map_char[cnt][ft_strlen(line) -1] = 0;
 }
