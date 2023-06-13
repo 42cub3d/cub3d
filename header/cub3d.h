@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/13 17:24:38 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/06/13 19:43:54 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_img_minimap
 	int		bits_per_pixel;
 	int		line_len;
 	int		endian;
+	int		pixel_size;
 }				t_img_minimap;
 
 typedef struct s_map
@@ -70,6 +71,7 @@ typedef struct s_map
 	struct s_player		player;
 	char				**map_argv;
 	char				**map_char;
+	int					max_map_line;
 	bool				is_player_in_map;
 	struct s_img_wall	*img;
 	int					floor_color[3];
@@ -99,5 +101,7 @@ void	pixel_put_while(t_img_minimap *minimap, unsigned int w, unsigned int h, int
 void	set_minimap(t_map *map, t_img_minimap *minimap);
 void	draw_map(t_map *map);
 void	init_img(t_map *map);
+void	get_map_line_max(t_map *map);
+unsigned int	get_pixel_size(t_map *map);
 
 #endif
