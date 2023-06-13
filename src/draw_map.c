@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 17:01:43 by gkwon             #+#    #+#             */
-/*   Updated: 2023/06/13 16:24:52 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/13 19:51:19 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,53 @@ void	my_mlx_pixel_put(t_img_minimap *minimap, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = minimap->addr + (y * minimap->line_len + x * (minimap->bits_per_pixel / 8));
+	dst = minimap->addr + (y * minimap->line_len + x
+			*(minimap->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 }
 
 void	pixel_put_while(t_img_minimap *minimap, unsigned int w, unsigned int h, int color)
 {
-	unsigned int	x;
-	unsigned int	y;
-	unsigned int	size;
+	int	x;
+	int	y;
 
 	x = 0;
-	size = 10;
-	while (x < size)
+	while (x < minimap->pixel_size)
 	{
 		y = 0;
-		while (y < size)
+		while (y < minimap->pixel_size)
 		{
-			my_mlx_pixel_put(minimap, h * size + x, w * size + y, color);
+			my_mlx_pixel_put(minimap, h * minimap->pixel_size + x,
+				w * minimap->pixel_size + y, color);
 			y++;
 		}
 		x++;
 	}
+}
+
+void	get_map_line_max(t_map *map)
+{
+	int	w;
+	int	h;
+	int	max;
+
+	max = -2147483648;
+	h = 6;
+	while (h < (int)map->y + 6)
+	{
+		w = ft_strlen(map->map_char[h]);
+		if (w > max)
+			max = w;
+		h++;
+	}
+	map->max_map_line = max;
+}
+
+unsigned int	get_pixel_size(t_map *map)
+{
+	if (map->y >= (unsigned int)map->max_map_line)
+		return ((unsigned int)round(300 / map->y));
+	return ((unsigned int)round(400 / map->max_map_line));
 }
 
 void	set_minimap(t_map *map, t_img_minimap *minimap)
@@ -57,17 +82,20 @@ void	set_minimap(t_map *map, t_img_minimap *minimap)
 	f_color = create_rgb(map->floor_color[0], map->floor_color[1],
 			map->floor_color[2]);
 	h = 6;
+	get_map_line_max(map);
+	minimap->pixel_size = get_pixel_size(map);
+	printf("pixel size :%d\n", map->max_map_line);
 	while (h < map->y + 6)
 	{
 		w = 0;
 		while (w < ft_strlen(map->map_char[h]))
 		{
 			if (map->map_char[h][w] == '1') // ceiling
-				pixel_put_while(minimap, h - 6, w, c_color);
+				pixel_put_while(minimap, (h - 6), w, c_color);
 			else if (map->map_char[h][w] == '0') // floor
-				pixel_put_while(minimap, h - 6, w, f_color);
+				pixel_put_while(minimap, (h - 6), w, f_color);
 			else if (map->map_char[h][w] == 'N')
-				pixel_put_while(minimap, h - 6, w, 0x00FFFFFF);
+				pixel_put_while(minimap, (h - 6), w, 0x00FFFFFF);
 			w++;
 		}
 		h++;
@@ -78,7 +106,7 @@ void	draw_map(t_map *map)
 {
 	t_img_minimap	minimap;
 
-	minimap.img = mlx_new_image(map->mlx, 1000, 500);
+	minimap.img = mlx_new_image(map->mlx, 400, 300);
 	minimap.addr = mlx_get_data_addr(minimap.img, &minimap.bits_per_pixel,
 			&minimap.line_len, &minimap.endian);
 	set_minimap(map, &minimap);
