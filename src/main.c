@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/12 19:12:29 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/13 16:56:53 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 		j = 0;
 		while (map->map_char[i + std][j] != '\n' && map->map_char[i + std][j] != '\0')
 		{
-			if ((i == 0 || i == map->y) || (j == 0 || j == ft_strlen(map->map_char[i + std])))
+			if ((i == 0 || i == map->y - 1) || (j == 0 || j == ft_strlen(map->map_char[i + std]) - 1))
 				if (map->map_char[i + std][j] != '1')
 					return (1);
 			if (map->map_char[i + std][j] == 'N' ||
@@ -88,7 +88,7 @@ int	main(int argc, char **argv)
 	map.mlx = mlx_init();
 	if (!map.mlx)
 		return (0);
-	map.window = mlx_new_window(map.mlx, 640, 480, "cub3d");
+	map.window = mlx_new_window(map.mlx, 1600, 900, "cub3d");
 	if (!map.window)
 		return (0);
 	drow_window(&map);

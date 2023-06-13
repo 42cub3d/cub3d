@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:29:27 by gkwon             #+#    #+#             */
-/*   Updated: 2023/06/12 14:42:46 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/13 16:56:46 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	init_arg(t_map *map, int i)
 {
 	char	**tmp_rgb;
 
-	map->img = malloc(sizeof(t_img));
+	map->img = malloc(sizeof(t_img_wall));
 	map->img->n_wall = ft_strdup(map->map_argv[0]);
 	map->img->s_wall = ft_strdup(map->map_argv[1]);
 	map->img->w_wall = ft_strdup(map->map_argv[2]);

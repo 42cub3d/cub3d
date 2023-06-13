@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/12 19:32:39 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/13 16:25:59 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,34 +43,41 @@ typedef struct s_player
 	char			direction;
 }					t_player;
 
-typedef struct s_img
+typedef struct s_img_wall
 {
 	void			*w_wall;
 	void			*n_wall;
 	void			*e_wall;
 	void			*s_wall;
-}					t_img;
+}					t_img_wall;
+
+typedef struct s_img_minimap
+{
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_len;
+	int		endian;
+}				t_img_minimap;
 
 typedef struct s_map
 {
-	void			*mlx;
-	void			*window;
-	int				fd;
-	unsigned int	y;
-	struct s_player	player;
-	char			**map_argv;
-	char			**map_char;
-	bool			is_player_in_map;
-	struct s_img	*img;
-	int				floor_color[3];
-	int				ceiling_color[3];
+	void				*mlx;
+	void				*window;
+	int					fd;
+	unsigned int		y;
+	struct s_player		player;
+	char				**map_argv;
+	char				**map_char;
+	bool				is_player_in_map;
+	struct s_img_wall	*img;
+	int					floor_color[3];
+	int					ceiling_color[3];
 }					t_map;
 
 /* ===============../src=============== */
 
 void	ft_error(char *strerr);
-void	draw_map(t_map *map);
-void	init_img(t_map *map);
 int		exit_game(t_map *map);
 int		press_key(int key_code, t_map *map);
 void	next_mom(t_map *map, unsigned int *x, unsigned int *y, int key);
@@ -83,6 +90,13 @@ int		search_arg(t_map *map, int i, int j);
 void	init_map(t_map *map, int fd, int cnt);
 void	ft_putstr_fd(char *s, int fd);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+
+// draw_map.c
 int		create_rgb(int r, int g, int b);
+void	my_mlx_pixel_put(t_img_minimap *minimap, int x, int y, int color);
+void	pixel_put_while(t_img_minimap *minimap, unsigned int w, unsigned int h, int color);
+void	set_minimap(t_map *map, t_img_minimap *minimap);
+void	draw_map(t_map *map);
+void	init_img(t_map *map);
 
 #endif
