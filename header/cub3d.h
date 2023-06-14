@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/13 19:43:54 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/14 15:47:44 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,6 @@ void	set_minimap(t_map *map, t_img_minimap *minimap);
 void	draw_map(t_map *map);
 void	init_img(t_map *map);
 void	get_map_line_max(t_map *map);
-unsigned int	get_pixel_size(t_map *map);
+int		get_pixel_size(t_map *map);
 
 #endif

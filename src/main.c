@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/13 16:56:53 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/14 15:56:35 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 				map->map_char[i + std][j] == 'W')
 			{
 				map->player.x = j;
-				map->player.y = i;
+				map->player.y = i + std;
 				map->is_player_in_map = 1;
 			}
 			else if (map->map_char[i + std][j] != '\n' && map->map_char[i + std][j] != '0'
