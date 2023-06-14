@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 22:45:08 by gkwon             #+#    #+#             */
-/*   Updated: 2023/05/20 17:01:05 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/06/14 20:20:59 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,22 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	else if ((unsigned char)*s1 < (unsigned char)*s2)
 		return (-1);
 	return (0);
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void			*ret;
+	unsigned char	*tmp;
+	unsigned int	len;
+
+	if (!count && !size)
+		return (ft_strdup(""));
+	len = size * count;
+	ret = malloc(len);
+	if (!ret)
+		return (NULL);
+	tmp = (unsigned char *)ret;
+	while (len--)
+		*tmp++ = 0;
+	return (ret);
 }
