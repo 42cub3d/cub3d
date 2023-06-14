@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/14 15:56:35 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/14 20:43:54 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,72 @@ int	valid_argv(char **argv)
 	return (0);
 }
 
-int	map_valid_check(t_map *map, unsigned int std, unsigned int j)
+int	dfs(t_map *map, int x, int y, int pre_x, int pre_y)
+{
+	int	i;
+	int	j;
+
+	if (map->map_visited[y][x] && x == map->first_start_dfs[0] && y == map->first_start_dfs[1])
+		return (1);
+	if (map->map_visited[y][x])
+		return (0);
+	map->map_visited[y][x] = 1;
+	if (x == 0 && y == 0)
+	{
+		if (map->map_char[y + 1 + 6][x] == '1')
+		{
+			if (dfs(map, x, y + 1, 0, 0) == 1)
+				return (1);
+		}
+		else if (map->map_char[y + 6][x + 1] == '1')
+		{
+			if (dfs(map, x + 1, y, 0, 0) == 1)
+				return (1);
+		}
+		return (0);
+	}
+	else
+	{
+		i = -2;
+		while (++i < 2)
+		{
+			j = -2;
+			while (++j < 2)
+			{
+				if (x + i >= 0 && y + j >= 0 && i != j && !(i && j) && y + j < (int)map->y && x + i < (int)ft_strlen(map->map_char[y + 6])
+					&& (map->map_char[y + j + 6][x + i] == '1'))
+					if (!(x + i == pre_x && y + j == pre_y))
+						if (dfs(map, x + i, y + j, x, y) == 1)
+							return (1);
+			}
+		}
+	}
+	return (0);
+}
+
+void	find_first(t_map *map)
+{
+	int i;
+	int j;
+
+	map->first_start_dfs = malloc(sizeof(int) * 2);
+	j = -1;
+	while (++j < (int)map->y)
+	{
+		i = -1;
+		while (++i < (int)ft_strlen(map->map_char[6 + j]))
+		{
+			if (map->map_char[6 + j][i] == '1')
+			{
+				map->first_start_dfs[0] = i;
+				map->first_start_dfs[1] = j;
+				return ;
+			}
+		}
+	}
+}
+
+void	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 {
 	unsigned int	i;
 
@@ -44,11 +109,8 @@ int	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 	while (i < map->y)
 	{
 		j = 0;
-		while (map->map_char[i + std][j] != '\n' && map->map_char[i + std][j] != '\0')
+		while (map->map_char[i + std][j] != '\0')
 		{
-			if ((i == 0 || i == map->y - 1) || (j == 0 || j == ft_strlen(map->map_char[i + std]) - 1))
-				if (map->map_char[i + std][j] != '1')
-					return (1);
 			if (map->map_char[i + std][j] == 'N' ||
 				map->map_char[i + std][j] == 'S' ||
 				map->map_char[i + std][j] == 'E' ||
@@ -58,16 +120,24 @@ int	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 				map->player.y = i + std;
 				map->is_player_in_map = 1;
 			}
-			else if (map->map_char[i + std][j] != '\n' && map->map_char[i + std][j] != '0'
+			else if (map->map_char[i + std][j] != ' ' && map->map_char[i + std][j] != '\n' && map->map_char[i + std][j] != '0'
 					&& map->map_char[i + std][j] != '1')
-				return (0);
+			{
+				printf ("%d %d/n", j, i + std);
+				printf ("%c", map->map_char[i + std][j]);
+				return ;
+			}
 			j++;
 		}
 		i++;
 	}
+	find_first(map);
+	if (!*(map->first_start_dfs))
+		ft_error(E_MAP_VAL);
+	if (dfs(map, map->first_start_dfs[0], map->first_start_dfs[1], map->first_start_dfs[0], map->first_start_dfs[1]) == 0)
+		ft_error(E_MAP_COLSED);
 	if (map->is_player_in_map != 1)
-		return (1);
-	return (0);
+		ft_error(E_MAP_VAL);
 }
 
 int	main(int argc, char **argv)
@@ -83,8 +153,7 @@ int	main(int argc, char **argv)
 		ft_error(E_FD);
 	init_map(&map, map.fd, 0);
 	search_arg(&map, map.y -1, 0);
-	if (map_valid_check(&map, 6, -1))
-		ft_error(E_MAP_COLSED);
+	map_valid_check(&map, 6, -1);
 	map.mlx = mlx_init();
 	if (!map.mlx)
 		return (0);

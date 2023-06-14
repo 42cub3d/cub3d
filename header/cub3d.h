@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/14 15:47:44 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/14 20:28:28 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,13 @@ typedef struct s_map
 	struct s_player		player;
 	char				**map_argv;
 	char				**map_char;
+	int					*first_start_dfs;
 	int					max_map_line;
 	bool				is_player_in_map;
 	struct s_img_wall	*img;
 	int					floor_color[3];
 	int					ceiling_color[3];
+	int					**map_visited;
 }					t_map;
 
 /* ===============../src=============== */
@@ -87,12 +89,13 @@ void	next_mom(t_map *map, unsigned int *x, unsigned int *y, int key);
 void	move(t_map *map, int key);
 void	drow_window(t_map *map);
 int		valid_argv(char **argv);
-int		map_valid_check(t_map *map, unsigned int i, unsigned int j);
+void		map_valid_check(t_map *map, unsigned int i, unsigned int j);
 int		init_arg(t_map *map, int i);
 int		search_arg(t_map *map, int i, int j);
 void	init_map(t_map *map, int fd, int cnt);
 void	ft_putstr_fd(char *s, int fd);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+void	*ft_calloc(size_t count, size_t size);
 
 // draw_map.c
 int		create_rgb(int r, int g, int b);
