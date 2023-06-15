@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/14 20:43:54 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/06/15 16:43:23 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,13 @@ void	find_first(t_map *map)
 			{
 				map->first_start_dfs[0] = i;
 				map->first_start_dfs[1] = j;
+				printf("i : %d, j : %d\n", i, j);
 				return ;
 			}
 		}
 	}
+	free(map->first_start_dfs);
+	map->first_start_dfs = 0;
 }
 
 void	map_valid_check(t_map *map, unsigned int std, unsigned int j)
@@ -132,7 +135,7 @@ void	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 		i++;
 	}
 	find_first(map);
-	if (!*(map->first_start_dfs))
+	if (!(map->first_start_dfs))
 		ft_error(E_MAP_VAL);
 	if (dfs(map, map->first_start_dfs[0], map->first_start_dfs[1], map->first_start_dfs[0], map->first_start_dfs[1]) == 0)
 		ft_error(E_MAP_COLSED);
