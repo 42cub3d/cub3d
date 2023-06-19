@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/15 16:43:23 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/19 15:22:50 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	dfs(t_map *map, int x, int y, int pre_x, int pre_y)
 	if (map->map_visited[y][x])
 		return (0);
 	map->map_visited[y][x] = 1;
-	if (x == 0 && y == 0)
+	if (x == pre_x && y == pre_y)
 	{
 		if (map->map_char[y + 1 + 6][x] == '1')
 		{
@@ -114,17 +114,15 @@ void	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 		j = 0;
 		while (map->map_char[i + std][j] != '\0')
 		{
-			if (map->map_char[i + std][j] == 'N' ||
-				map->map_char[i + std][j] == 'S' ||
-				map->map_char[i + std][j] == 'E' ||
-				map->map_char[i + std][j] == 'W')
+			if (map->map_char[i + std][j] == 'N' || map->map_char[i + std][j] == 'S' ||
+				map->map_char[i + std][j] == 'E' || map->map_char[i + std][j] == 'W')
 			{
 				map->player.x = j;
-				map->player.y = i + std;
+				map->player.y = i;
 				map->is_player_in_map = 1;
 			}
-			else if (map->map_char[i + std][j] != ' ' && map->map_char[i + std][j] != '\n' && map->map_char[i + std][j] != '0'
-					&& map->map_char[i + std][j] != '1')
+			else if (map->map_char[i + std][j] != ' ' && map->map_char[i + std][j] != '\n' 
+					&& map->map_char[i + std][j] != '0' && map->map_char[i + std][j] != '1')
 			{
 				printf ("%d %d/n", j, i + std);
 				printf ("%c", map->map_char[i + std][j]);
