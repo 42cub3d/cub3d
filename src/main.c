@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/19 15:22:50 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/06/19 20:20:57 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,77 +36,95 @@ int	valid_argv(char **argv)
 	return (0);
 }
 
-int	dfs(t_map *map, int x, int y, int pre_x, int pre_y)
+int find_longest_line(t_map *map)
 {
+	int ret;
 	int	i;
-	int	j;
 
-	if (map->map_visited[y][x] && x == map->first_start_dfs[0] && y == map->first_start_dfs[1])
-		return (1);
-	if (map->map_visited[y][x])
-		return (0);
-	map->map_visited[y][x] = 1;
-	if (x == pre_x && y == pre_y)
+	i = 5;
+	ret = 0;
+	while(++i < (int)map->y + 6)
+		if (ret < (int)ft_strlen(map->map_char[i]))
+			ret = (int)ft_strlen(map->map_char[i]);
+	return (ret);
+}
+
+char	**make_expand_map(t_map *map)
+{
+	char **expand_map;
+	int	i;
+	int j;
+
+	i = 0;
+	expand_map = malloc(sizeof(char *) * (map->y + 2) + 1);
+	map->max_map_line = find_longest_line(map);
+
+	expand_map[0] = malloc(sizeof(char) * map->max_map_line + 3);
+	ft_memset(expand_map[0], 'x', map->max_map_line + 3);
+	expand_map[0][map->max_map_line + 2] = 0;
+
+	expand_map[map->y + 1] = malloc(sizeof(char) * map->max_map_line + 3);
+	ft_memset(expand_map[map->y + 1], 'x', map->max_map_line + 3);
+	expand_map[map->y + 1][map->max_map_line + 2] = 0;
+
+	while (++i <= (int)map->y)
 	{
-		if (map->map_char[y + 1 + 6][x] == '1')
+		expand_map[i] = malloc(sizeof(char) * map->max_map_line + 3);
+		ft_memset(expand_map[i], 'x', map->max_map_line + 3);
+		expand_map[i][map->max_map_line + 2] = 0;
+		j = 0;
+		while (++j <= (int)ft_strlen(map->map_char[i + 5]))
 		{
-			if (dfs(map, x, y + 1, 0, 0) == 1)
-				return (1);
+			if (map->map_char[i + 5][j - 1] != '\n')
+				expand_map[i][j] = map->map_char[i + 5][j - 1];
+			if (map->map_char[i + 5][j - 1] == ' ')
+				expand_map[i][j] = 'x';
 		}
-		else if (map->map_char[y + 6][x + 1] == '1')
-		{
-			if (dfs(map, x + 1, y, 0, 0) == 1)
-				return (1);
-		}
-		return (0);
 	}
-	else
+	//i = 0;
+	//while (expand_map[i])
+	//	printf("%s\n", expand_map[i++]);
+	return (expand_map);
+}
+
+int	check_closed(t_map *map, char **expanded_map)
+{
+	int i;
+	int j;
+	int	x;
+	int	y;
+
+	i = 0;
+	while(++i < (int)map->y)
 	{
-		i = -2;
-		while (++i < 2)
+		j = -1;
+		while(expanded_map[i][++j])
 		{
-			j = -2;
-			while (++j < 2)
+			if (expanded_map[i][j] == 'x')
 			{
-				if (x + i >= 0 && y + j >= 0 && i != j && !(i && j) && y + j < (int)map->y && x + i < (int)ft_strlen(map->map_char[y + 6])
-					&& (map->map_char[y + j + 6][x + i] == '1'))
-					if (!(x + i == pre_x && y + j == pre_y))
-						if (dfs(map, x + i, y + j, x, y) == 1)
-							return (1);
+				x = -2;
+				while (++x < 2)
+				{
+					y = -2;
+					while (++y < 2)
+					{
+						if (i + x < 0 || j + y < 0 || (x == 0 && y == 0) || expanded_map[i + x][j + y] == 0 || j + y == (int)map->y + 2)
+							continue ;
+						else
+							if (expanded_map[i + x][j + y] != '1' && expanded_map[i + x][j + y] != 'x')
+								return (1);
+					}
+				}
 			}
 		}
 	}
 	return (0);
 }
 
-void	find_first(t_map *map)
-{
-	int i;
-	int j;
-
-	map->first_start_dfs = malloc(sizeof(int) * 2);
-	j = -1;
-	while (++j < (int)map->y)
-	{
-		i = -1;
-		while (++i < (int)ft_strlen(map->map_char[6 + j]))
-		{
-			if (map->map_char[6 + j][i] == '1')
-			{
-				map->first_start_dfs[0] = i;
-				map->first_start_dfs[1] = j;
-				printf("i : %d, j : %d\n", i, j);
-				return ;
-			}
-		}
-	}
-	free(map->first_start_dfs);
-	map->first_start_dfs = 0;
-}
-
 void	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 {
 	unsigned int	i;
+	char	**expanded_map;
 
 	i = 0;
 	while (i < map->y)
@@ -132,10 +150,8 @@ void	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 		}
 		i++;
 	}
-	find_first(map);
-	if (!(map->first_start_dfs))
-		ft_error(E_MAP_VAL);
-	if (dfs(map, map->first_start_dfs[0], map->first_start_dfs[1], map->first_start_dfs[0], map->first_start_dfs[1]) == 0)
+	expanded_map = make_expand_map(map);
+	if (check_closed(map, expanded_map))
 		ft_error(E_MAP_COLSED);
 	if (map->is_player_in_map != 1)
 		ft_error(E_MAP_VAL);

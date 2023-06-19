@@ -1,5 +1,5 @@
 CC=cc
-CFLAGS=-Wall -Wextra -Werror -g
+CFLAGS=-Wall -Wextra -Werror -g -fsanitize=address
 LMLX=-L./minilibx -lmlx -framework OpenGL -framework AppKit
 LIBFT=./libft/libft.a
 HEADER=-I./header

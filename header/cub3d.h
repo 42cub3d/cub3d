@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/14 20:28:28 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/06/19 19:57:27 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,11 @@ typedef struct s_map
 	struct s_player		player;
 	char				**map_argv;
 	char				**map_char;
-	int					*first_start_dfs;
 	int					max_map_line;
 	bool				is_player_in_map;
 	struct s_img_wall	*img;
 	int					floor_color[3];
 	int					ceiling_color[3];
-	int					**map_visited;
 }					t_map;
 
 /* ===============../src=============== */
@@ -96,6 +94,7 @@ void	init_map(t_map *map, int fd, int cnt);
 void	ft_putstr_fd(char *s, int fd);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void	*ft_calloc(size_t count, size_t size);
+void	*ft_memset(void *b, int c, size_t len);
 
 // draw_map.c
 int		create_rgb(int r, int g, int b);
