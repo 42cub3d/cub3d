@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:29:27 by gkwon             #+#    #+#             */
-/*   Updated: 2023/06/14 20:39:20 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/06/19 20:19:06 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,37 @@ void	init_map(t_map *map, int fd, int cnt)
 	{
 		map->map_char = malloc(sizeof(char *) * (cnt + 1));
 		map->y = cnt;
-		map->map_visited = malloc(sizeof(int *) * map->y - 6);
 	}
-	while (line && *line == '\n')
-		line = get_next_line(fd);
+	//line = get_next_line(fd);
 	if (line)
 		init_map(map, fd, cnt + 1);
 	map->map_char[cnt] = line;
-	if (line)
-		map->map_visited[cnt] = ft_calloc(sizeof(int), ft_strlen(line));
-	if ((unsigned int)cnt != map->y && (unsigned int)cnt != map->y -1)
-		map->map_char[cnt][ft_strlen(line) -1] = 0;
+	if ((unsigned int)cnt != map->y && (unsigned int)cnt != map->y - 1)
+		map->map_char[cnt][ft_strlen(line) - 1] = 0;
 }
+
+//void	init_map(t_map *map, int fd, int cnt)
+//{
+//	char	*line;
+
+//	line = get_next_line(fd);
+//	if (cnt == 0 && !line)
+//		ft_error(PARSINGERR);
+//	while (line && *line == '\n')
+//		line = get_next_line(fd);
+//	if (!line)
+//	{
+//		map->map_char = malloc(sizeof(char *) * (cnt + 1));
+//		map->y = cnt;
+//		map->map_visited = malloc(sizeof(int *) * map->y - 6);
+//	}
+//	while (line && *line == '\n')
+//		line = get_next_line(fd);
+//	if (line)
+//		init_map(map, fd, cnt + 1);
+//	map->map_char[cnt] = line;
+//	if (line)
+//		map->map_visited[cnt] = ft_calloc(sizeof(int), ft_strlen(line));
+//	if ((unsigned int)cnt != map->y && (unsigned int)cnt != map->y -1)
+//		map->map_char[cnt][ft_strlen(line) -1] = 0;
+//}
