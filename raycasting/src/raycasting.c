@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 17:37:48 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/26 19:36:55 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/26 21:04:18 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # define X_EVENT_KEY_RELEASE 3
 # define X_EVENT_KEY_EXIT 17
 # define KEY_ESC 53
+# define KEY_LEFT 123
+# define KEY_RIGHT 124
 # define KEY_W 13
 # define KEY_A 0
 # define KEY_S 1
@@ -212,25 +214,39 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
+int	create_rgb(int r, int g, int b)
+{
+	return (r << 16 | g << 8 | b);
+}
+
 void	draw_pixel(int x, t_map *map, int color)
 {
 	int	i;
 
+	i = 0;
+	while (i < map->draw_info->draw_start)
+	{
+		my_mlx_pixel_put(map->img, x, i, create_rgb(255, 192, 203));
+		i++;
+	}
 	i = map->draw_info->draw_start;
 	while (i < map->draw_info->draw_end)
 	{
 		my_mlx_pixel_put(map->img, x, i, color);
 		i++;
 	}
-}
-
-int	create_rgb(int r, int g, int b)
-{
-	return (r << 16 | g << 8 | b);
+	i = map->draw_info->draw_end;
+	while (i < screenHeight)
+	{
+		my_mlx_pixel_put(map->img, x, i, create_rgb(255, 20, 147));
+		i++;
+	}
 }
 
 int	set_color(t_DDA *dda)
 {
+	if (worldMap[dda->map_x][dda->map_y] == 0)
+		return create_rgb(255, 20, 147);
 	if (worldMap[dda->map_x][dda->map_y] == 1)
 		return create_rgb(255, 0, 0);
 	if (worldMap[dda->map_x][dda->map_y] == 2)
@@ -279,12 +295,17 @@ void	raycasting(t_map *map, t_player *player)
 int	press_key(int key_code, t_map *map)
 {
 	t_player	*player;
+	double		padding;
 
 	player = map->player;
+	padding = 0.1;
+	// 이동 시 padding 줄 것
 	if (key_code == KEY_ESC)
 		exit_game(map);
 	if (key_code == KEY_W)
 	{
+		// forward
+		printf("key w\n");
 		if (worldMap[(int)(player->pos_x + player->dir_x * map->move_speed)][(int)player->pos_y] == 0)
 			player->pos_x += player->dir_x * map->move_speed;
 		if (worldMap[(int)player->pos_x][(int)(player->pos_y + player->dir_y * map->move_speed)] == 0)
@@ -292,6 +313,7 @@ int	press_key(int key_code, t_map *map)
 	}
 	if (key_code == KEY_S)
 	{
+		//backward
 		printf("key s\n");
 		if (worldMap[(int)(player->pos_x - player->dir_x * map->move_speed)][(int)player->pos_y] == 0)
 			player->pos_x -= player->dir_x * map->move_speed;
@@ -300,7 +322,26 @@ int	press_key(int key_code, t_map *map)
 	}
 	if (key_code == KEY_D)
 	{
+		//right
 		printf("key d\n");
+		if (worldMap[(int)(player->pos_x + player->dir_y * map->move_speed)][(int)player->pos_y] == 0)
+			player->pos_x += player->dir_y * map->move_speed;
+		if (worldMap[(int)(player->pos_x)][(int)(player->pos_y - player->dir_x * map->move_speed)] == 0)
+			player->pos_y -= player->dir_x * map->move_speed;
+	}
+	if (key_code == KEY_A)
+	{
+		//left
+		printf("key a\n");
+		if (worldMap[(int)(player->pos_x)][(int)(player->pos_y + player->dir_x * map->move_speed)] == 0)
+			player->pos_y += player->dir_x * map->move_speed;
+		if (worldMap[(int)(player->pos_x - player->dir_y * map->move_speed)][(int)(player->pos_y)] == 0)
+			player->pos_x -= player->dir_y * map->move_speed;
+	}
+	if (key_code == KEY_RIGHT)
+	{
+		//camera right
+		printf("key right\n");
 		double old_dir_x = player->dir_x;
 		player->dir_x = player->dir_x * cos(-(map->rot_speed)) - player->dir_y * sin(-(map->rot_speed));
 		player->dir_y = old_dir_x * sin(-(map->rot_speed)) + player->dir_y * cos(-(map->rot_speed));
@@ -308,9 +349,10 @@ int	press_key(int key_code, t_map *map)
 		player->plane_x = player->plane_x * cos(-(map->rot_speed)) - player->plane_y * sin(-(map->rot_speed));
 		player->plane_y = old_plane_x * sin(-(map->rot_speed)) + player->plane_y * cos(-(map->rot_speed));
 	}
-	if (key_code == KEY_A)
+	if (key_code == KEY_LEFT)
 	{
-		printf("key a\n");
+		//camera left
+		printf("key left\n");
 		double old_dir_x = player->dir_x;
 		player->dir_x = player->dir_x * cos(map->rot_speed) - player->dir_y * sin(map->rot_speed);
 		player->dir_y = old_dir_x * sin(map->rot_speed) + player->dir_y * cos(map->rot_speed);
