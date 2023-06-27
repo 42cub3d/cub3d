@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 17:37:48 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/26 21:04:18 by subcho           ###   ########.fr       */
+/*   Updated: 2023/06/27 17:17:01 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ void	do_dda(t_DDA *dda)
 void	set_draw_info(t_map *map)
 {
 	t_draw_info *draw_info;
-	t_DDA *dda;
+	t_DDA 		*dda;
 
 	draw_info = map->draw_info;
 	dda = map->dda;
@@ -201,7 +201,7 @@ void	set_draw_info(t_map *map)
 	if (draw_info->draw_start < 0)
 		draw_info->draw_start = 0;
 	draw_info->draw_end = draw_info->line_height / 2 + screenHeight / 2;
-	if (draw_info->draw_end >= screenHeight)
+	if (draw_info->draw_end >= screenHeight || draw_info->draw_end < 0)
 		draw_info->draw_end = screenHeight - 1;
 }
 
