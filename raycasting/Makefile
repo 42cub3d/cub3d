@@ -2,7 +2,7 @@ CC=cc
 CFLAGS=-Wall -Wextra -Werror
 LMLX=-L./minilibx -lmlx -framework OpenGL -framework AppKit
 NAME=raycasting
-SRCS=./src/raycasting.c
+SRCS=./src/raycasting_textured.c
 OBJS=$(SRCS:.c=.o)
 
 all: $(NAME)
