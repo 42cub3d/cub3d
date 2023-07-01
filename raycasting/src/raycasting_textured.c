@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 17:37:48 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/01 19:55:19 by subcho           ###   ########.fr       */
+/*   Updated: 2023/07/01 19:58:01 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -418,10 +418,10 @@ void	set_texture(t_map *map)
 	t_img		*texture;
 
 	texture = malloc(sizeof(t_img) * 4);
-	(texture)[0].img = mlx_xpm_file_to_image(map->mlx, "./image/bluestone.xpm", &w, &h);
-	(texture)[1].img = mlx_xpm_file_to_image(map->mlx, "./image/eagle.xpm", &w, &h);
-	(texture)[2].img = mlx_xpm_file_to_image(map->mlx, "./image/greystone.xpm", &w, &h);
-	(texture)[3].img = mlx_xpm_file_to_image(map->mlx, "./image/redbrick.xpm", &w, &h);
+	(texture)[0].img = mlx_xpm_file_to_image(map->mlx, "./image/NO.xpm", &w, &h);
+	(texture)[1].img = mlx_xpm_file_to_image(map->mlx, "./image/SO.xpm", &w, &h);
+	(texture)[2].img = mlx_xpm_file_to_image(map->mlx, "./image/WE.xpm", &w, &h);
+	(texture)[3].img = mlx_xpm_file_to_image(map->mlx, "./image/EA.xpm", &w, &h);
 	i = 0;
 	while (i < 4)
 	{
