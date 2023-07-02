@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 17:37:48 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/01 19:58:01 by subcho           ###   ########.fr       */
+/*   Updated: 2023/07/02 16:19:45 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ typedef	struct  s_DDA
 	int		pitch;
 	double	tex_pos;
 	int		tex_x;
-	int		wall_x;
+	double	wall_x;
 }	t_DDA;
 
 typedef struct s_draw_info
@@ -104,11 +104,11 @@ typedef struct s_draw_info
 
 typedef struct s_img
 {
-	void		*img;
-	int			*addr;
-	int			bits_per_pixel;
-	int			endian;
-	int			line_len;
+	void			*img;
+	unsigned int	*addr;
+	int				bits_per_pixel;
+	int				endian;
+	int				line_len;
 }	t_img;
 
 typedef struct s_map
@@ -258,7 +258,7 @@ void	calculate_wall_texture(t_map *map, double ray_dir_x, double ray_dir_y)
 		dda->wall_x = map->player->pos_y + dda->perp_wall_dist * ray_dir_y;
 	else
 		dda->wall_x = map->player->pos_x + dda->perp_wall_dist * ray_dir_x;
-	dda->wall_x -= floor(dda->wall_x);
+	dda->wall_x -= floor((dda->wall_x));
 	dda->tex_x = (int)(dda->wall_x * (double)texWidth);
 	if (dda->side == 0 && ray_dir_x > 0)
 		dda->tex_x = texWidth - dda->tex_x - 1;
@@ -319,7 +319,7 @@ int	raycasting(t_map *map)
 	i = 0;
 	player = map->player;
 	map->img->img = mlx_new_image(map->mlx, screenWidth, screenHeight);
-	map->img->addr = (int *)mlx_get_data_addr(map->img->img, &map->img->bits_per_pixel, &map->img->line_len, &map->img->endian);
+	map->img->addr = (unsigned int *)mlx_get_data_addr(map->img->img, &map->img->bits_per_pixel, &map->img->line_len, &map->img->endian);
 	while (i < screenWidth)
 	{
 		// cal ray position and direction
@@ -422,10 +422,11 @@ void	set_texture(t_map *map)
 	(texture)[1].img = mlx_xpm_file_to_image(map->mlx, "./image/SO.xpm", &w, &h);
 	(texture)[2].img = mlx_xpm_file_to_image(map->mlx, "./image/WE.xpm", &w, &h);
 	(texture)[3].img = mlx_xpm_file_to_image(map->mlx, "./image/EA.xpm", &w, &h);
+
 	i = 0;
 	while (i < 4)
 	{
-		(texture)[i].addr = (int *)mlx_get_data_addr((texture)[i].img, &(texture)[i].bits_per_pixel, &(texture)[i].line_len, &(texture)[i].endian);
+		(texture)[i].addr = (unsigned int *)mlx_get_data_addr((texture)[i].img, &(texture)[i].bits_per_pixel, &(texture)[i].line_len, &(texture)[i].endian);
 		i++;
 	}
 	map->texture = texture;
@@ -447,6 +448,7 @@ int main()
 	map.dda = &dda;
 	map.dda->pitch = 100;
 	map.draw_info = &draw_info;
+	reset_buffer();
 	map.mlx = mlx_init();
 	map.win = mlx_new_window(map.mlx, screenWidth, screenHeight, "raycasting");
 	set_texture(&map);
