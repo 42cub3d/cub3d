@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/11 15:40:35 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/11 17:06:14 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 void	drow_window(t_map *map)
 {
 	(void)map;
-	init_img(map);
-	draw_map(map);
+	//init_img(map);
+	set_texture(map);
+	//draw_map(map);
 	mlx_loop_hook(map->mlx, raycasting, map);
 	mlx_hook(map->win, X_EVENT_KEY_PRESS, 0, press_key, map);
 	mlx_hook(map->win, X_EVENT_KEY_EXIT, 0, exit_game, map);
@@ -44,7 +45,7 @@ int find_longest_line(t_map *map)
 
 	i = 5;
 	ret = 0;
-	while(++i < (int)map->y + 6)
+	while(++i < (int)map->x + 6)
 		if (ret < (int)ft_strlen(map->map_char[i]))
 			ret = (int)ft_strlen(map->map_char[i]);
 	return (ret);
@@ -57,18 +58,18 @@ char	**make_expand_map(t_map *map)
 	int j;
 
 	i = 0;
-	expand_map = malloc(sizeof(char *) * (map->y + 2) + 1);
+	expand_map = malloc(sizeof(char *) * (map->x + 2) + 1);
 	map->max_map_line = find_longest_line(map);
 
 	expand_map[0] = malloc(sizeof(char) * map->max_map_line + 3);
 	ft_memset(expand_map[0], 'x', map->max_map_line + 3);
 	expand_map[0][map->max_map_line + 2] = 0;
 
-	expand_map[map->y + 1] = malloc(sizeof(char) * map->max_map_line + 3);
-	ft_memset(expand_map[map->y + 1], 'x', map->max_map_line + 3);
-	expand_map[map->y + 1][map->max_map_line + 2] = 0;
+	expand_map[map->x + 1] = malloc(sizeof(char) * map->max_map_line + 3);
+	ft_memset(expand_map[map->x + 1], 'x', map->max_map_line + 3);
+	expand_map[map->x + 1][map->max_map_line + 2] = 0;
 
-	while (++i <= (int)map->y)
+	while (++i <= (int)map->x)
 	{
 		expand_map[i] = malloc(sizeof(char) * map->max_map_line + 3);
 		ft_memset(expand_map[i], 'x', map->max_map_line + 3);
@@ -96,7 +97,7 @@ int	check_closed(t_map *map, char **expanded_map)
 	int	y;
 
 	i = 0;
-	while(++i < (int)map->y)
+	while(++i < (int)map->x)
 	{
 		j = -1;
 		while(expanded_map[i][++j])
@@ -109,7 +110,7 @@ int	check_closed(t_map *map, char **expanded_map)
 					y = -2;
 					while (++y < 2)
 					{
-						if (i + x < 0 || j + y < 0 || (x == 0 && y == 0) || expanded_map[i + x][j + y] == 0 || j + y == (int)map->y + 2)
+						if (i + x < 0 || j + y < 0 || (x == 0 && y == 0) || expanded_map[i + x][j + y] == 0 || j + y == (int)map->x + 2)
 							continue ;
 						else
 							if (expanded_map[i + x][j + y] != '1' && expanded_map[i + x][j + y] != 'x')
@@ -128,7 +129,7 @@ void	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 	char	**expanded_map;
 
 	i = 0;
-	while (i < map->y)
+	while (i < map->x)
 	{
 		j = 0;
 		while (map->map_char[i + std][j] != '\0')
@@ -136,8 +137,8 @@ void	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 			if (map->map_char[i + std][j] == 'N' || map->map_char[i + std][j] == 'S' ||
 				map->map_char[i + std][j] == 'E' || map->map_char[i + std][j] == 'W')
 			{
-				map->player->pos_x = j;
-				map->player->pos_y = i;
+				map->player->pos_x = i + 0.5;
+				map->player->pos_y = j + 0.5;
 				map->is_player_in_map = 1;
 				map->map_char[i + std][j] = '0';
 			}
@@ -193,7 +194,7 @@ int	main(int argc, char **argv)
 	if (map.fd <= 0)
 		ft_error(E_FD);
 	init_map(&map, map.fd, 0);
-	search_arg(&map, map.y -1, 0);
+	search_arg(&map, map.x -1, 0);
 	map_valid_check(&map, 6, -1);
 	map.mlx = mlx_init();
 	if (!map.mlx)
@@ -203,6 +204,5 @@ int	main(int argc, char **argv)
 		return (0);
 	map.map_char += 6;
 	print_map(&map);
-	set_texture(&map);
 	drow_window(&map);
 }

@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 15:55:15 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/11 15:45:11 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/11 17:50:50 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,18 @@ void	set_texture(t_map *map)
 	i = 0;
 	while (i < 4)
 	{
-		(map->texture)[i].addr = (int *)mlx_get_data_addr((map->texture)[i].img,
+		(map->texture)[i].addr = (unsigned int *)mlx_get_data_addr((map->texture)[i].img,
 		 &(map->texture)[i].bits_per_pixel, &(map->texture)[i].line_len,
 		  &(map->texture)[i].endian);
 		i++;
 	}
+	printf("texture : %p\n", (map->texture)[0].addr);
 }
 
 void	set_player(t_player *player)
 {
-	//player->pos_x = map; // player's start position
-	//player->pos_y = 1.5;
+	//player->pos_x = player->pos_x + 0.5; // player's start position
+	//player->pos_y = player->pos_y + 0.5;
 	player->dir_x = -1; // initial direction vector
 	player->dir_y = 0;
 	player->plane_x = 0; // 2d raycaster version of camera plane
@@ -81,7 +82,7 @@ void	do_dda(t_DDA *dda, t_map *map)
 	while (dda->hit == 0)
 	{
 		if (dda->side_dist_x < dda->side_dist_y)
-		{ 
+		{
 			dda->side_dist_x += dda->delta_dist_x;
 			dda->map_x += dda->step_x;
 			dda->side = 0;
@@ -92,7 +93,7 @@ void	do_dda(t_DDA *dda, t_map *map)
 			dda->map_y += dda->step_y;
 			dda->side = 1;
 		}
-		if (map->map_char[dda->map_x][dda->map_y] - '0' > 0)
+		if (map->map_char[dda->map_x][dda->map_y] == '1')
 			dda->hit = 1;
 	}
 }
@@ -100,7 +101,7 @@ void	do_dda(t_DDA *dda, t_map *map)
 void	set_draw_info(t_map *map)
 {
 	map->draw_info->line_height = (int)(screenHeight / map->dda->perp_wall_dist);
-	map->draw_info->draw_start = map->draw_info->line_height / 2 + screenHeight / 2 + map->dda->pitch;
+	map->draw_info->draw_start = -map->draw_info->line_height / 2 + screenHeight / 2 + map->dda->pitch;
 	if (map->draw_info->draw_start < 0)
 		map->draw_info->draw_start = 0;
 	map->draw_info->draw_end = map->draw_info->line_height / 2 + screenHeight / 2 + map->dda->pitch;
@@ -121,11 +122,12 @@ void	draw_buffer(int x, t_map *map)
 	i = 0;
 	while (i < map->draw_info->draw_start)
 	{
-		map->img->addr[screenWidth * i + x] = create_rgb(255, 230, 245);
+		// ceiling
+		map->img->addr[screenWidth * i + x] = create_rgb(255, 230, 0);
 		i++;
 	}
 	i = map->draw_info->draw_end;
-	while (i < screenHeight)
+	while (i + 1 < screenHeight)
 	{
 		// floor
 		map->img->addr[screenWidth * i + x] = create_rgb(255, 192, 203);
@@ -136,7 +138,7 @@ void	draw_buffer(int x, t_map *map)
 void	calculate_wall_texture(t_map *map, double ray_dir_x, double ray_dir_y)
 {
 	if (map->dda->side == 0)
-		map->dda->wall_x = map->player->pos_x + map->dda->perp_wall_dist * ray_dir_y;
+		map->dda->wall_x = map->player->pos_y + map->dda->perp_wall_dist * ray_dir_y;
 	else
 		map->dda->wall_x = map->player->pos_x + map->dda->perp_wall_dist * ray_dir_x;
 	map->dda->wall_x -= floor(map->dda->wall_x);
@@ -198,7 +200,7 @@ int	raycasting(t_map *map)
 
 	i = 0;
 	map->img->img = mlx_new_image(map->mlx, screenWidth, screenHeight); // why always get new image?
-	map->img->addr = (int *)mlx_get_data_addr(map->img->img, &map->img->bits_per_pixel, &map->img->line_len, &map->img->endian);
+	map->img->addr = (unsigned int *)mlx_get_data_addr(map->img->img, &map->img->bits_per_pixel, &map->img->line_len, &map->img->endian);
 	while (i < screenWidth)
 	{
 		// cal ray position and direction
@@ -212,7 +214,6 @@ int	raycasting(t_map *map)
       	else
 			map->dda->perp_wall_dist = (map->dda->map_y - map->player->pos_y + (1 - map->dda->step_y) / 2) / ray_dir_y;
 		set_draw_info(map);
-		printf("%d\n", map->map_char[map->dda->map_x][map->dda->map_y] - '0');
 		texNum = map->map_char[map->dda->map_x][map->dda->map_y] - '0' - 1;
 		calculate_wall_texture(map, ray_dir_x, ray_dir_y);
 		set_color(i, map->draw_info, map, texNum);
@@ -236,33 +237,33 @@ int	press_key(int key_code, t_map *map)
 	if (key_code == KEY_W)
 	{
 		// forward
-		if (map->map_char[(int)(map->player->pos_x + map->player->dir_x * map->move_speed)][(int)map->player->pos_y] == 0)
+		if (map->map_char[(int)(map->player->pos_x + map->player->dir_x * map->move_speed)][(int)map->player->pos_y] == '0')
 			map->player->pos_x += map->player->dir_x * map->move_speed;
-		if (map->map_char[(int)map->player->pos_x][(int)(map->player->pos_y + map->player->dir_y * map->move_speed)] == 0)
+		if (map->map_char[(int)map->player->pos_x][(int)(map->player->pos_y + map->player->dir_y * map->move_speed)] == '0')
 			map->player->pos_y += map->player->dir_y * map->move_speed;
 	}
 	if (key_code == KEY_S)
 	{
 		//backward
-		if (map->map_char[(int)(map->player->pos_x - map->player->dir_x * map->move_speed)][(int)map->player->pos_y] == 0)
+		if (map->map_char[(int)(map->player->pos_x - map->player->dir_x * map->move_speed)][(int)map->player->pos_y] == '0')
 			map->player->pos_x -= map->player->dir_x * map->move_speed;
-		if (map->map_char[(int)map->player->pos_x][(int)(map->player->pos_y - map->player->dir_y * map->move_speed)] == 0)
+		if (map->map_char[(int)map->player->pos_x][(int)(map->player->pos_y - map->player->dir_y * map->move_speed)] == '0')
 			map->player->pos_y -= map->player->dir_y * map->move_speed;
 	}
 	if (key_code == KEY_D)
 	{
 		//right
-		if (map->map_char[(int)(map->player->pos_x + map->player->dir_y * map->move_speed)][(int)map->player->pos_y] == 0)
+		if (map->map_char[(int)(map->player->pos_x + map->player->dir_y * map->move_speed)][(int)map->player->pos_y] == '0')
 			map->player->pos_x += map->player->dir_y * map->move_speed;
-		if (map->map_char[(int)(map->player->pos_x)][(int)(map->player->pos_y - map->player->dir_x * map->move_speed)] == 0)
+		if (map->map_char[(int)(map->player->pos_x)][(int)(map->player->pos_y - map->player->dir_x * map->move_speed)] == '0')
 			map->player->pos_y -= map->player->dir_x * map->move_speed;
 	}
 	if (key_code == KEY_A)
 	{
 		//left
-		if (map->map_char[(int)(map->player->pos_x)][(int)(map->player->pos_y + map->player->dir_x * map->move_speed)] == 0)
+		if (map->map_char[(int)(map->player->pos_x)][(int)(map->player->pos_y + map->player->dir_x * map->move_speed)] == '0')
 			map->player->pos_y += map->player->dir_x * map->move_speed;
-		if (map->map_char[(int)(map->player->pos_x - map->player->dir_y * map->move_speed)][(int)(map->player->pos_y)] == 0)
+		if (map->map_char[(int)(map->player->pos_x - map->player->dir_y * map->move_speed)][(int)(map->player->pos_y)] == '0')
 			map->player->pos_x -= map->player->dir_y * map->move_speed;
 	}
 	if (key_code == KEY_RIGHT)

@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/11 14:59:08 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/11 17:01:28 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@
 # define E_MAP_COLSED "MAP IS NOT COLSED"
 
 // map info
-#define mapWidth 24
-#define mapHeight 24
 #define texWidth 64
 #define texHeight 64
 #define screenWidth 1280
@@ -49,12 +47,12 @@
 
 typedef struct s_img_minimap
 {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_len;
-	int		endian;
-	int		pixel_size;
+	void			*img;
+	char			*addr;
+	int				bits_per_pixel;
+	int				line_len;
+	int				endian;
+	int				pixel_size;
 }				t_img_minimap;
 
 typedef struct s_player
@@ -83,20 +81,20 @@ typedef	struct  s_DDA
 	int		pitch;
 	double	tex_pos;
 	int		tex_x;
-	int		wall_x;
+	double	wall_x;
 }	t_DDA;
 
 typedef struct s_img
 {
 	void		*img;
-	int			*addr;
+	unsigned int *addr;
 	int			bits_per_pixel;
 	int			endian;
 	int			line_len;
-	void			*w_wall;
-	void			*n_wall;
-	void			*e_wall;
-	void			*s_wall;
+	void		*w_wall;
+	void		*n_wall;
+	void		*e_wall;
+	void		*s_wall;
 }	t_img;
 
 typedef struct s_draw_info
@@ -111,7 +109,7 @@ typedef struct s_map
 	void				*mlx;
 	void				*win;
 	int					fd;
-	unsigned int		y;
+	unsigned int		x;
 	t_player		*player;
 	char				**map_argv;
 	char				**map_char;

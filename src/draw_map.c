@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 17:01:43 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/11 15:20:44 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/11 16:15:01 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	get_map_line_max(t_map *map)
 
 	max = -2147483648;
 	h = 0;
-	while (h < (int)map->y)
+	while (h < (int)map->x)
 	{
 		w = ft_strlen(map->map_char[h]);
 		if (w > max)
@@ -74,7 +74,7 @@ void	set_minimap(t_map *map, t_img_minimap *minimap)
 	f_color = create_rgb(255, 255, 255);
 	h = 0;
 	printf("map->player->x : %f, map->player->y : %f\n", map->player->pos_x, map->player->pos_y);
-	while (h < map->y)
+	while (h < map->x)
 	{
 		w = 0;
 		while (w < ft_strlen(map->map_char[h]))
@@ -93,8 +93,8 @@ void	set_minimap(t_map *map, t_img_minimap *minimap)
 
 int		get_pixel_size(t_map *map)
 {
-	if (map->y > (unsigned int)map->max_map_line)
-		return (300 / map->y);
+	if (map->x > (unsigned int)map->max_map_line)
+		return (300 / map->x);
 	return (400 / map->max_map_line);
 }
 
@@ -104,7 +104,7 @@ void	draw_map(t_map *map)
 
 	get_map_line_max(map);
 	minimap.pixel_size = get_pixel_size(map);
-	minimap.img = mlx_new_image(map->mlx, minimap.pixel_size * map->max_map_line, minimap.pixel_size * map->y);
+	minimap.img = mlx_new_image(map->mlx, minimap.pixel_size * map->max_map_line, minimap.pixel_size * map->x);
 	minimap.addr = mlx_get_data_addr(minimap.img, &minimap.bits_per_pixel,
 			&minimap.line_len, &minimap.endian);
 	set_minimap(map, &minimap);
