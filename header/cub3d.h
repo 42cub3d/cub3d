@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/19 19:57:27 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/11 14:59:08 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,29 +28,24 @@
 # define PARSINGERR "PARSING FAILED"
 # define E_MAP_COLSED "MAP IS NOT COLSED"
 
+// map info
+#define mapWidth 24
+#define mapHeight 24
+#define texWidth 64
+#define texHeight 64
+#define screenWidth 1280
+#define screenHeight 720
+
 # define X_EVENT_KEY_PRESS 2
 # define X_EVENT_KEY_RELEASE 3
 # define X_EVENT_KEY_EXIT 17
 # define KEY_ESC 53
+# define KEY_LEFT 123
+# define KEY_RIGHT 124
 # define KEY_W 13
 # define KEY_A 0
 # define KEY_S 1
 # define KEY_D 2
-
-typedef struct s_player
-{
-	unsigned int	x;
-	unsigned int	y;
-	char			direction;
-}					t_player;
-
-typedef struct s_img_wall
-{
-	void			*w_wall;
-	void			*n_wall;
-	void			*e_wall;
-	void			*s_wall;
-}					t_img_wall;
 
 typedef struct s_img_minimap
 {
@@ -62,20 +57,74 @@ typedef struct s_img_minimap
 	int		pixel_size;
 }				t_img_minimap;
 
+typedef struct s_player
+{
+	double	pos_x;
+	double	pos_y;
+	double	dir_x;
+	double	dir_y;
+	double	plane_x;
+	double	plane_y; // 1인칭 슈팅게임에 적합
+}	t_player;
+
+typedef	struct  s_DDA
+{
+	int		map_x;
+	int		map_y;
+	double	side_dist_x;
+	double	side_dist_y;
+	double	delta_dist_x;
+	double	delta_dist_y;
+	double	perp_wall_dist;
+	int		step_x;
+	int		step_y;
+	int		hit;
+	int		side;
+	int		pitch;
+	double	tex_pos;
+	int		tex_x;
+	int		wall_x;
+}	t_DDA;
+
+typedef struct s_img
+{
+	void		*img;
+	int			*addr;
+	int			bits_per_pixel;
+	int			endian;
+	int			line_len;
+	void			*w_wall;
+	void			*n_wall;
+	void			*e_wall;
+	void			*s_wall;
+}	t_img;
+
+typedef struct s_draw_info
+{
+	int	line_height;
+	int	draw_start;
+	int	draw_end;
+}	t_draw_info;
+
 typedef struct s_map
 {
 	void				*mlx;
-	void				*window;
+	void				*win;
 	int					fd;
 	unsigned int		y;
-	struct s_player		player;
+	t_player		*player;
 	char				**map_argv;
 	char				**map_char;
 	int					max_map_line;
 	bool				is_player_in_map;
-	struct s_img_wall	*img;
 	int					floor_color[3];
 	int					ceiling_color[3];
+	t_DDA		*dda;
+	t_draw_info	*draw_info;
+	double		move_speed;
+	double		rot_speed;
+	t_img		*img;
+	t_img		*texture;
 }					t_map;
 
 /* ===============../src=============== */
@@ -105,5 +154,9 @@ void	draw_map(t_map *map);
 void	init_img(t_map *map);
 void	get_map_line_max(t_map *map);
 int		get_pixel_size(t_map *map);
+
+void	set_texture(t_map *map);
+int	raycasting(t_map *map);
+void	set_player(t_player *player);
 
 #endif

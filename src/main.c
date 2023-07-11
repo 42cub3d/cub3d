@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/19 20:20:57 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/11 15:40:35 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ void	drow_window(t_map *map)
 	(void)map;
 	init_img(map);
 	draw_map(map);
-	mlx_hook(map->window, X_EVENT_KEY_PRESS, 0, press_key, map);
-	mlx_hook(map->window, X_EVENT_KEY_EXIT, 0, exit_game, map);
+	mlx_loop_hook(map->mlx, raycasting, map);
+	mlx_hook(map->win, X_EVENT_KEY_PRESS, 0, press_key, map);
+	mlx_hook(map->win, X_EVENT_KEY_EXIT, 0, exit_game, map);
 	mlx_loop(map->mlx);
 }
 
@@ -135,9 +136,10 @@ void	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 			if (map->map_char[i + std][j] == 'N' || map->map_char[i + std][j] == 'S' ||
 				map->map_char[i + std][j] == 'E' || map->map_char[i + std][j] == 'W')
 			{
-				map->player.x = j;
-				map->player.y = i;
+				map->player->pos_x = j;
+				map->player->pos_y = i;
 				map->is_player_in_map = 1;
+				map->map_char[i + std][j] = '0';
 			}
 			else if (map->map_char[i + std][j] != ' ' && map->map_char[i + std][j] != '\n' 
 					&& map->map_char[i + std][j] != '0' && map->map_char[i + std][j] != '1')
@@ -157,9 +159,31 @@ void	map_valid_check(t_map *map, unsigned int std, unsigned int j)
 		ft_error(E_MAP_VAL);
 }
 
+void print_map(t_map *map)
+{
+	int i;
+
+	i = 0;
+	while (map->map_char[i])
+		printf("%s\n", map->map_char[i++]);
+}
+
 int	main(int argc, char **argv)
 {
 	t_map		map;
+	t_player	player;
+	t_DDA		dda;
+	t_draw_info	draw_info;
+	t_img		img;
+
+	set_player(&player);
+	map.player = &player;
+	map.move_speed = 0.5;
+	map.rot_speed = 0.3;
+	map.img = &img;
+	map.dda = &dda;
+	map.dda->pitch = 100;
+	map.draw_info = &draw_info;
 
 	if (!*(++argv) || argc == 1)
 		return (0);
@@ -174,8 +198,11 @@ int	main(int argc, char **argv)
 	map.mlx = mlx_init();
 	if (!map.mlx)
 		return (0);
-	map.window = mlx_new_window(map.mlx, 1600, 900, "cub3d");
-	if (!map.window)
+	map.win = mlx_new_window(map.mlx, screenWidth, screenHeight, "cub3d");
+	if (!map.win)
 		return (0);
+	map.map_char += 6;
+	print_map(&map);
+	set_texture(&map);
 	drow_window(&map);
 }
