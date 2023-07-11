@@ -9,7 +9,8 @@ SRCS=./src/main.c\
 		./src/key_hook.c\
 		./src/draw_map.c\
 		./src/map_parsing_init.c\
-		./src/cub3d_utils.c
+		./src/cub3d_utils.c\
+		./src/raycasting.c
 OBJS=$(SRCS:.c=.o)
 
 all: $(NAME)

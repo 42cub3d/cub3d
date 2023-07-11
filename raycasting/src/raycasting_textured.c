@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting_textured.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 17:37:48 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/30 17:07:54 by subcho           ###   ########.fr       */
+/*   Updated: 2023/07/10 16:34:30 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define KEY_S 1
 # define KEY_D 2
 
-int worldMap[mapWidth][mapHeight]=
+int map->map_char[mapWidth][mapHeight]=
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -143,41 +143,41 @@ void	drow_window(t_map	*map)
 
 void	set_player(t_player *player)
 {
-	player->pos_x = 22; // player's start position
-	player->pos_y = 11.5;
-	player->dir_x = -1; // initial direction vector
-	player->dir_y = 0;
-	player->plane_x = 0; // 2d raycaster version of camera plane
-	player->plane_y = 0.66;
+	player.pos_x = 22; // player's start position
+	player.pos_y = 11.5;
+	player.dir_x = -1; // initial direction vector
+	player.dir_y = 0;
+	player.plane_x = 0; // 2d raycaster version of camera plane
+	player.plane_y = 0.66;
 }
 
 void	set_dda(t_DDA *dda, t_player *player, double ray_dir_x, double ray_dir_y)
 {
-	dda->map_x = (int)player->pos_x;
-	dda->map_y = (int)player->pos_y;
+	dda->map_x = (int)player.pos_x;
+	dda->map_y = (int)player.pos_y;
 	dda->delta_dist_x = fabs(1 / ray_dir_x);
 	dda->delta_dist_y = fabs(1 / ray_dir_y);
 	dda->hit = 0;
 	if (ray_dir_x < 0)
 	{
 		dda->step_x = -1;
-		dda->side_dist_x = (player->pos_x - dda->map_x) * dda->delta_dist_x;
+		dda->side_dist_x = (player.pos_x - dda->map_x) * dda->delta_dist_x;
 	}
 	else
 	{
 		dda->step_x = 1;
-		dda->side_dist_x = (dda->map_x + 1.0 - player->pos_x)
+		dda->side_dist_x = (dda->map_x + 1.0 - player.pos_x)
 			* dda->delta_dist_x;
 	}
 	if (ray_dir_y < 0)
 	{
 		dda->step_y = -1;
-		dda->side_dist_y = (player->pos_y - dda->map_y) * dda->delta_dist_y;
+		dda->side_dist_y = (player.pos_y - dda->map_y) * dda->delta_dist_y;
 	}
 	else
 	{
 		dda->step_y = 1;
-		dda->side_dist_y = (dda->map_y + 1.0 - player->pos_y)
+		dda->side_dist_y = (dda->map_y + 1.0 - player.pos_y)
 			* dda->delta_dist_y;
 	}
 }
@@ -198,7 +198,7 @@ void	do_dda(t_DDA *dda)
 			dda->map_y += dda->step_y;
 			dda->side = 1;
 		}
-		if (worldMap[dda->map_x][dda->map_y] > 0)
+		if (map->map_char[dda->map_x][dda->map_y] > 0)
 			dda->hit = 1;
 	}
 }
@@ -255,9 +255,9 @@ void	calculate_wall_texture(t_map *map, double ray_dir_x, double ray_dir_y)
 
 	dda = map->dda;
 	if (dda->side == 0)
-		dda->wall_x = map->player->pos_x + dda->perp_wall_dist * ray_dir_y;
+		dda->wall_x = map->player.pos_x + dda->perp_wall_dist * ray_dir_y;
 	else
-		dda->wall_x = map->player->pos_x + dda->perp_wall_dist * ray_dir_x;
+		dda->wall_x = map->player.pos_x + dda->perp_wall_dist * ray_dir_x;
 	dda->wall_x -= floor(dda->wall_x);
 	dda->tex_x = (int)(dda->wall_x * (double)texWidth);
 	if (dda->side == 0 && ray_dir_x > 0)
@@ -318,22 +318,22 @@ int	raycasting(t_map *map)
 
 	i = 0;
 	player = map->player;
-	map->img->img = mlx_new_image(map->mlx, screenWidth, screenHeight);
+	map->img->img = mlx_new_image(map->mlx, screenWidth, screenHeight); // why always get new image?
 	map->img->addr = (int *)mlx_get_data_addr(map->img->img, &map->img->bits_per_pixel, &map->img->line_len, &map->img->endian);
 	while (i < screenWidth)
 	{
 		// cal ray position and direction
 		camera_x = 2 * i / (double)screenWidth - 1;
-		ray_dir_x = player->dir_x + player->plane_x * camera_x;
-		ray_dir_y = player->dir_y + player->plane_y * camera_x;
+		ray_dir_x = player.dir_x + player.plane_x * camera_x;
+		ray_dir_y = player.dir_y + player.plane_y * camera_x;
 		set_dda(map->dda, player, ray_dir_x, ray_dir_y);
 		do_dda(map->dda);
 		if (map->dda->side == 0)
-			map->dda->perp_wall_dist = (map->dda->map_x - map->player->pos_x + (1 - map->dda->step_x) / 2) / ray_dir_x;
+			map->dda->perp_wall_dist = (map->dda->map_x - map->player.pos_x + (1 - map->dda->step_x) / 2) / ray_dir_x;
       	else
-			map->dda->perp_wall_dist = (map->dda->map_y - map->player->pos_y + (1 - map->dda->step_y) / 2) / ray_dir_y;
+			map->dda->perp_wall_dist = (map->dda->map_y - map->player.pos_y + (1 - map->dda->step_y) / 2) / ray_dir_y;
 		set_draw_info(map);
-		texNum = worldMap[map->dda->map_x][map->dda->map_y] - 1;
+		texNum = map->map_char[map->dda->map_x][map->dda->map_y] - 1;
 		calculate_wall_texture(map, ray_dir_x, ray_dir_y);
 		set_color(i, map->draw_info, map, texNum);
 		draw_buffer(i, map);
@@ -358,54 +358,54 @@ int	press_key(int key_code, t_map *map)
 	if (key_code == KEY_W)
 	{
 		// forward
-		if (worldMap[(int)(player->pos_x + player->dir_x * map->move_speed)][(int)player->pos_y] == 0)
-			player->pos_x += player->dir_x * map->move_speed;
-		if (worldMap[(int)player->pos_x][(int)(player->pos_y + player->dir_y * map->move_speed)] == 0)
-			player->pos_y += player->dir_y * map->move_speed;
+		if (map->map_char[(int)(player.pos_x + player.dir_x * map->move_speed)][(int)player.pos_y] == 0)
+			player.pos_x += player.dir_x * map->move_speed;
+		if (map->map_char[(int)player.pos_x][(int)(player.pos_y + player.dir_y * map->move_speed)] == 0)
+			player.pos_y += player.dir_y * map->move_speed;
 	}
 	if (key_code == KEY_S)
 	{
 		//backward
-		if (worldMap[(int)(player->pos_x - player->dir_x * map->move_speed)][(int)player->pos_y] == 0)
-			player->pos_x -= player->dir_x * map->move_speed;
-		if (worldMap[(int)player->pos_x][(int)(player->pos_y - player->dir_y * map->move_speed)] == 0)
-			player->pos_y -= player->dir_y * map->move_speed;
+		if (map->map_char[(int)(player.pos_x - player.dir_x * map->move_speed)][(int)player.pos_y] == 0)
+			player.pos_x -= player.dir_x * map->move_speed;
+		if (map->map_char[(int)player.pos_x][(int)(player.pos_y - player.dir_y * map->move_speed)] == 0)
+			player.pos_y -= player.dir_y * map->move_speed;
 	}
 	if (key_code == KEY_D)
 	{
 		//right
-		if (worldMap[(int)(player->pos_x + player->dir_y * map->move_speed)][(int)player->pos_y] == 0)
-			player->pos_x += player->dir_y * map->move_speed;
-		if (worldMap[(int)(player->pos_x)][(int)(player->pos_y - player->dir_x * map->move_speed)] == 0)
-			player->pos_y -= player->dir_x * map->move_speed;
+		if (map->map_char[(int)(player.pos_x + player.dir_y * map->move_speed)][(int)player.pos_y] == 0)
+			player.pos_x += player.dir_y * map->move_speed;
+		if (map->map_char[(int)(player.pos_x)][(int)(player.pos_y - player.dir_x * map->move_speed)] == 0)
+			player.pos_y -= player.dir_x * map->move_speed;
 	}
 	if (key_code == KEY_A)
 	{
 		//left
-		if (worldMap[(int)(player->pos_x)][(int)(player->pos_y + player->dir_x * map->move_speed)] == 0)
-			player->pos_y += player->dir_x * map->move_speed;
-		if (worldMap[(int)(player->pos_x - player->dir_y * map->move_speed)][(int)(player->pos_y)] == 0)
-			player->pos_x -= player->dir_y * map->move_speed;
+		if (map->map_char[(int)(player.pos_x)][(int)(player.pos_y + player.dir_x * map->move_speed)] == 0)
+			player.pos_y += player.dir_x * map->move_speed;
+		if (map->map_char[(int)(player.pos_x - player.dir_y * map->move_speed)][(int)(player.pos_y)] == 0)
+			player.pos_x -= player.dir_y * map->move_speed;
 	}
 	if (key_code == KEY_RIGHT)
 	{
 		//camera right
-		double old_dir_x = player->dir_x;
-		player->dir_x = player->dir_x * cos(-(map->rot_speed)) - player->dir_y * sin(-(map->rot_speed));
-		player->dir_y = old_dir_x * sin(-(map->rot_speed)) + player->dir_y * cos(-(map->rot_speed));
-		double old_plane_x = player->plane_x;
-		player->plane_x = player->plane_x * cos(-(map->rot_speed)) - player->plane_y * sin(-(map->rot_speed));
-		player->plane_y = old_plane_x * sin(-(map->rot_speed)) + player->plane_y * cos(-(map->rot_speed));
+		double old_dir_x = player.dir_x;
+		player.dir_x = player.dir_x * cos(-(map->rot_speed)) - player.dir_y * sin(-(map->rot_speed));
+		player.dir_y = old_dir_x * sin(-(map->rot_speed)) + player.dir_y * cos(-(map->rot_speed));
+		double old_plane_x = player.plane_x;
+		player.plane_x = player.plane_x * cos(-(map->rot_speed)) - player.plane_y * sin(-(map->rot_speed));
+		player.plane_y = old_plane_x * sin(-(map->rot_speed)) + player.plane_y * cos(-(map->rot_speed));
 	}
 	if (key_code == KEY_LEFT)
 	{
 		//camera left
-		double old_dir_x = player->dir_x;
-		player->dir_x = player->dir_x * cos(map->rot_speed) - player->dir_y * sin(map->rot_speed);
-		player->dir_y = old_dir_x * sin(map->rot_speed) + player->dir_y * cos(map->rot_speed);
-		double old_plane_x = player->plane_x;
-		player->plane_x = player->plane_x * cos(map->rot_speed) - player->plane_y * sin(map->rot_speed);
-		player->plane_y = old_plane_x * sin(map->rot_speed) + player->plane_y * cos(map->rot_speed);
+		double old_dir_x = player.dir_x;
+		player.dir_x = player.dir_x * cos(map->rot_speed) - player.dir_y * sin(map->rot_speed);
+		player.dir_y = old_dir_x * sin(map->rot_speed) + player.dir_y * cos(map->rot_speed);
+		double old_plane_x = player.plane_x;
+		player.plane_x = player.plane_x * cos(map->rot_speed) - player.plane_y * sin(map->rot_speed);
+		player.plane_y = old_plane_x * sin(map->rot_speed) + player.plane_y * cos(map->rot_speed);
 	}
 	return (0);
 }

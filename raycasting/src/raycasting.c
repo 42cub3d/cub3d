@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 17:37:48 by subcho            #+#    #+#             */
-/*   Updated: 2023/06/30 14:51:27 by subcho           ###   ########.fr       */
+/*   Updated: 2023/07/10 16:58:48 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define KEY_S 1
 # define KEY_D 2
 
-int worldMap[mapWidth][mapHeight]=
+int map->map_char[mapWidth][mapHeight]=
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -184,7 +184,7 @@ void	do_dda(t_DDA *dda)
 			dda->map_y += dda->step_y;
 			dda->side = 1;
 		}
-		if (worldMap[dda->map_x][dda->map_y] > 0)
+		if (map->map_char[dda->map_x][dda->map_y] > 0)
 			dda->hit = 1;
 	}
 }
@@ -245,15 +245,15 @@ void	draw_buffer(int x, t_map *map, int color)
 
 int	set_color(t_DDA *dda)
 {
-	if (worldMap[dda->map_x][dda->map_y] == 0)
+	if (map->map_char[dda->map_x][dda->map_y] == 0)
 		return create_rgb(255, 20, 147);
-	if (worldMap[dda->map_x][dda->map_y] == 1)
+	if (map->map_char[dda->map_x][dda->map_y] == 1)
 		return create_rgb(255, 0, 0);
-	if (worldMap[dda->map_x][dda->map_y] == 2)
+	if (map->map_char[dda->map_x][dda->map_y] == 2)
 		return create_rgb(0, 255, 0);
-	if (worldMap[dda->map_x][dda->map_y] == 3)
+	if (map->map_char[dda->map_x][dda->map_y] == 3)
 		return create_rgb(0, 0, 255);
-	if (worldMap[dda->map_x][dda->map_y] == 4)
+	if (map->map_char[dda->map_x][dda->map_y] == 4)
 		return create_rgb(255, 255, 255);
 	return create_rgb(255, 255, 0);
 }
@@ -306,36 +306,36 @@ int	press_key(int key_code, t_map *map)
 	{
 		// forward
 		printf("key w\n");
-		if (worldMap[(int)(player->pos_x + player->dir_x * map->move_speed)][(int)player->pos_y] == 0)
+		if (map->map_char[(int)(player->pos_x + player->dir_x * map->move_speed)][(int)player->pos_y] == 0)
 			player->pos_x += player->dir_x * map->move_speed;
-		if (worldMap[(int)player->pos_x][(int)(player->pos_y + player->dir_y * map->move_speed)] == 0)
+		if (map->map_char[(int)player->pos_x][(int)(player->pos_y + player->dir_y * map->move_speed)] == 0)
 			player->pos_y += player->dir_y * map->move_speed;
 	}
 	if (key_code == KEY_S)
 	{
 		//backward
 		printf("key s\n");
-		if (worldMap[(int)(player->pos_x - player->dir_x * map->move_speed)][(int)player->pos_y] == 0)
+		if (map->map_char[(int)(player->pos_x - player->dir_x * map->move_speed)][(int)player->pos_y] == 0)
 			player->pos_x -= player->dir_x * map->move_speed;
-		if (worldMap[(int)player->pos_x][(int)(player->pos_y - player->dir_y * map->move_speed)] == 0)
+		if (map->map_char[(int)player->pos_x][(int)(player->pos_y - player->dir_y * map->move_speed)] == 0)
 			player->pos_y -= player->dir_y * map->move_speed;
 	}
 	if (key_code == KEY_D)
 	{
 		//right
 		printf("key d\n");
-		if (worldMap[(int)(player->pos_x + player->dir_y * map->move_speed)][(int)player->pos_y] == 0)
+		if (map->map_char[(int)(player->pos_x + player->dir_y * map->move_speed)][(int)player->pos_y] == 0)
 			player->pos_x += player->dir_y * map->move_speed;
-		if (worldMap[(int)(player->pos_x)][(int)(player->pos_y - player->dir_x * map->move_speed)] == 0)
+		if (map->map_char[(int)(player->pos_x)][(int)(player->pos_y - player->dir_x * map->move_speed)] == 0)
 			player->pos_y -= player->dir_x * map->move_speed;
 	}
 	if (key_code == KEY_A)
 	{
 		//left
 		printf("key a\n");
-		if (worldMap[(int)(player->pos_x)][(int)(player->pos_y + player->dir_x * map->move_speed)] == 0)
+		if (map->map_char[(int)(player->pos_x)][(int)(player->pos_y + player->dir_x * map->move_speed)] == 0)
 			player->pos_y += player->dir_x * map->move_speed;
-		if (worldMap[(int)(player->pos_x - player->dir_y * map->move_speed)][(int)(player->pos_y)] == 0)
+		if (map->map_char[(int)(player->pos_x - player->dir_y * map->move_speed)][(int)(player->pos_y)] == 0)
 			player->pos_x -= player->dir_y * map->move_speed;
 	}
 	if (key_code == KEY_RIGHT)

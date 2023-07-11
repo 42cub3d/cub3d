@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 17:01:43 by gkwon             #+#    #+#             */
-/*   Updated: 2023/06/14 16:00:48 by subcho           ###   ########.fr       */
+/*   Updated: 2023/07/11 15:20:44 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	get_map_line_max(t_map *map)
 	int	max;
 
 	max = -2147483648;
-	h = 6;
-	while (h < (int)map->y + 6)
+	h = 0;
+	while (h < (int)map->y)
 	{
 		w = ft_strlen(map->map_char[h]);
 		if (w > max)
@@ -72,9 +72,9 @@ void	set_minimap(t_map *map, t_img_minimap *minimap)
 
 	c_color = create_rgb(255, 192, 203);
 	f_color = create_rgb(255, 255, 255);
-	h = 6;
-	printf("player.x : %d, player.y : %d\n", map->player.x, map->player.y);
-	while (h < map->y + 6)
+	h = 0;
+	printf("map->player->x : %f, map->player->y : %f\n", map->player->pos_x, map->player->pos_y);
+	while (h < map->y)
 	{
 		w = 0;
 		while (w < ft_strlen(map->map_char[h]))
@@ -83,7 +83,7 @@ void	set_minimap(t_map *map, t_img_minimap *minimap)
 				pixel_put_while(minimap, (h - 6), w, c_color);
 			else if (map->map_char[h][w] == '0') // floor
 				pixel_put_while(minimap, (h - 6), w, f_color);
-			else if (w == map->player.x && h == map->player.y)
+			else if (w == map->player->pos_x && h == map->player->pos_y)
 				pixel_put_while(minimap, (h - 6), w, create_rgb(255, 103, 129));
 			w++;
 		}
@@ -108,7 +108,7 @@ void	draw_map(t_map *map)
 	minimap.addr = mlx_get_data_addr(minimap.img, &minimap.bits_per_pixel,
 			&minimap.line_len, &minimap.endian);
 	set_minimap(map, &minimap);
-	mlx_put_image_to_window(map->mlx, map->window, minimap.img, 0, 0);
+	mlx_put_image_to_window(map->mlx, map->win, minimap.img, 0, 0);
 }
 
 void	init_img(t_map *map)
