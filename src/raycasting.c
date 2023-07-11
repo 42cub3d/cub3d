@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 15:55:15 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/11 17:50:50 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/11 20:27:53 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ void	set_texture(t_map *map)
 	int			i;
 
 	map->texture = malloc(sizeof(t_img) * 4);
-	(map->texture)[0].img = mlx_xpm_file_to_image(map->mlx, "./image/NO.xpm", &w, &h);
-	(map->texture)[1].img = mlx_xpm_file_to_image(map->mlx, "./image/SO.xpm", &w, &h);
-	(map->texture)[2].img = mlx_xpm_file_to_image(map->mlx, "./image/EA.xpm", &w, &h);
-	(map->texture)[3].img = mlx_xpm_file_to_image(map->mlx, "./image/WE.xpm", &w, &h);
+	(map->texture)[0].img = mlx_xpm_file_to_image(map->mlx, "./image/EA.xpm", &w, &h);
+	(map->texture)[1].img = mlx_xpm_file_to_image(map->mlx, "./image/WE.xpm", &w, &h);
+	(map->texture)[2].img = mlx_xpm_file_to_image(map->mlx, "./image/SO.xpm", &w, &h);
+	(map->texture)[3].img = mlx_xpm_file_to_image(map->mlx, "./image/NO.xpm", &w, &h);
 	i = 0;
 	while (i < 4)
 	{
@@ -33,7 +33,6 @@ void	set_texture(t_map *map)
 		  &(map->texture)[i].endian);
 		i++;
 	}
-	printf("texture : %p\n", (map->texture)[0].addr);
 }
 
 void	set_player(t_player *player)
@@ -190,6 +189,21 @@ void	reset_buffer()
 	}
 }
 
+int set_tex_num(t_map *map, double ray_dir_x, double ray_dir_y)
+{
+	int	texNum;
+
+	if (map->dda->side == 1 && ray_dir_y > 0)
+		texNum = 0;
+	if (map->dda->side == 1 && ray_dir_y < 0)
+		texNum = 1;
+	if (map->dda->side == 0 && ray_dir_x > 0)
+		texNum = 2;
+	if (map->dda->side == 0 && ray_dir_x < 0)
+		texNum = 3;
+	return (texNum);
+}
+
 int	raycasting(t_map *map)
 {
 	int			i;
@@ -214,7 +228,7 @@ int	raycasting(t_map *map)
       	else
 			map->dda->perp_wall_dist = (map->dda->map_y - map->player->pos_y + (1 - map->dda->step_y) / 2) / ray_dir_y;
 		set_draw_info(map);
-		texNum = map->map_char[map->dda->map_x][map->dda->map_y] - '0' - 1;
+		texNum = set_tex_num(map, ray_dir_x, ray_dir_y);
 		calculate_wall_texture(map, ray_dir_x, ray_dir_y);
 		set_color(i, map->draw_info, map, texNum);
 		draw_buffer(i, map);
