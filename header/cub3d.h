@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/11 17:01:28 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/11 17:57:00 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,17 +84,21 @@ typedef	struct  s_DDA
 	double	wall_x;
 }	t_DDA;
 
-typedef struct s_img
+typedef struct s_img_info
 {
 	void		*img;
 	unsigned int *addr;
 	int			bits_per_pixel;
 	int			endian;
 	int			line_len;
-	void		*w_wall;
-	void		*n_wall;
-	void		*e_wall;
-	void		*s_wall;
+}	t_img_info;
+
+typedef struct s_img
+{
+	t_img_info	*w_wall;
+	t_img_info	*n_wall;
+	t_img_info	*e_wall;
+	t_img_info	*s_wall;
 }	t_img;
 
 typedef struct s_draw_info
