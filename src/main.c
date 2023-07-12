@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/11 17:06:14 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/12 17:20:47 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	drow_window(t_map *map)
 {
 	(void)map;
-	//init_img(map);
 	set_texture(map);
 	//draw_map(map);
 	mlx_loop_hook(map->mlx, raycasting, map);
@@ -24,97 +23,35 @@ void	drow_window(t_map *map)
 	mlx_loop(map->mlx);
 }
 
-int	valid_argv(char **argv)
+bool	check_condition(t_map *map, char **em, int i, int j)
 {
-	char	**split;
-	int		len;
-
-	len = 0;
-	split = ft_split(*argv, '.');
-	while (split[len])
-		len++;
-	if (!ft_strncmp(split[len - 1], "cub", 4))
+	if (i + map->t_i < 0 || j + map->t_j < 0 || (map->t_i
+			== 0 && map->t_j == 0) || em[i + map->t_i][j
+		+ map->t_j] == 0 || j + map->t_j == (int)map->x + 2)
 		return (1);
 	return (0);
 }
 
-int find_longest_line(t_map *map)
+int	check_closed(t_map *map, char **em, int i, int j)
 {
-	int ret;
-	int	i;
-
-	i = 5;
-	ret = 0;
-	while(++i < (int)map->x + 6)
-		if (ret < (int)ft_strlen(map->map_char[i]))
-			ret = (int)ft_strlen(map->map_char[i]);
-	return (ret);
-}
-
-char	**make_expand_map(t_map *map)
-{
-	char **expand_map;
-	int	i;
-	int j;
-
-	i = 0;
-	expand_map = malloc(sizeof(char *) * (map->x + 2) + 1);
-	map->max_map_line = find_longest_line(map);
-
-	expand_map[0] = malloc(sizeof(char) * map->max_map_line + 3);
-	ft_memset(expand_map[0], 'x', map->max_map_line + 3);
-	expand_map[0][map->max_map_line + 2] = 0;
-
-	expand_map[map->x + 1] = malloc(sizeof(char) * map->max_map_line + 3);
-	ft_memset(expand_map[map->x + 1], 'x', map->max_map_line + 3);
-	expand_map[map->x + 1][map->max_map_line + 2] = 0;
-
-	while (++i <= (int)map->x)
-	{
-		expand_map[i] = malloc(sizeof(char) * map->max_map_line + 3);
-		ft_memset(expand_map[i], 'x', map->max_map_line + 3);
-		expand_map[i][map->max_map_line + 2] = 0;
-		j = 0;
-		while (++j <= (int)ft_strlen(map->map_char[i + 5]))
-		{
-			if (map->map_char[i + 5][j - 1] != '\n')
-				expand_map[i][j] = map->map_char[i + 5][j - 1];
-			if (map->map_char[i + 5][j - 1] == ' ')
-				expand_map[i][j] = 'x';
-		}
-	}
-	//i = 0;
-	//while (expand_map[i])
-	//	printf("%s\n", expand_map[i++]);
-	return (expand_map);
-}
-
-int	check_closed(t_map *map, char **expanded_map)
-{
-	int i;
-	int j;
-	int	x;
-	int	y;
-
-	i = 0;
-	while(++i < (int)map->x)
+	while (++i < (int)map->x)
 	{
 		j = -1;
-		while(expanded_map[i][++j])
+		while (em[i][++j])
 		{
-			if (expanded_map[i][j] == 'x')
+			if (em[i][j] == 'x')
 			{
-				x = -2;
-				while (++x < 2)
+				map->t_i = -2;
+				while (++map->t_i < 2)
 				{
-					y = -2;
-					while (++y < 2)
+					map->t_j = -2;
+					while (++map->t_j < 2)
 					{
-						if (i + x < 0 || j + y < 0 || (x == 0 && y == 0) || expanded_map[i + x][j + y] == 0 || j + y == (int)map->x + 2)
+						if (check_condition(map, em, i, j))
 							continue ;
-						else
-							if (expanded_map[i + x][j + y] != '1' && expanded_map[i + x][j + y] != 'x')
-								return (1);
+						else if (em[i + map->t_i][j + map->t_j] != '1'
+							&& em[i + map->t_i][j + map->t_j] != 'x')
+							return (1);
 					}
 				}
 			}
@@ -123,50 +60,32 @@ int	check_closed(t_map *map, char **expanded_map)
 	return (0);
 }
 
-void	map_valid_check(t_map *map, unsigned int std, unsigned int j)
+void	map_valid_check(t_map *map, unsigned int std, unsigned int j,
+		unsigned int i)
 {
-	unsigned int	i;
-	char	**expanded_map;
-
-	i = 0;
-	while (i < map->x)
+	while (++i < map->x)
 	{
-		j = 0;
-		while (map->map_char[i + std][j] != '\0')
+		j = -1;
+		while (map->map_char[i + std][++j] != '\0')
 		{
-			if (map->map_char[i + std][j] == 'N' || map->map_char[i + std][j] == 'S' ||
-				map->map_char[i + std][j] == 'E' || map->map_char[i + std][j] == 'W')
+			if (map->map_char[i + std][j] == 'N' || map->map_char[i
+				+ std][j] == 'S' ||
+				map->map_char[i + std][j] == 'E' || map->map_char[i
+					+ std][j] == 'W')
 			{
 				map->player->pos_x = i + 0.5;
 				map->player->pos_y = j + 0.5;
 				map->is_player_in_map = 1;
 				map->map_char[i + std][j] = '0';
 			}
-			else if (map->map_char[i + std][j] != ' ' && map->map_char[i + std][j] != '\n' 
-					&& map->map_char[i + std][j] != '0' && map->map_char[i + std][j] != '1')
-			{
-				printf ("%d %d/n", j, i + std);
-				printf ("%c", map->map_char[i + std][j]);
+			else if (map->map_char[i + std][j] != ' ' && map->map_char[i
+					+ std][j] != '\n' && map->map_char[i + std][j] != '0'
+					&& map->map_char[i + std][j] != '1')
 				return ;
-			}
-			j++;
 		}
-		i++;
 	}
-	expanded_map = make_expand_map(map);
-	if (check_closed(map, expanded_map))
+	if (check_closed(map, make_expand_map(map, 0, 0), 0, 0))
 		ft_error(E_MAP_COLSED);
-	if (map->is_player_in_map != 1)
-		ft_error(E_MAP_VAL);
-}
-
-void print_map(t_map *map)
-{
-	int i;
-
-	i = 0;
-	while (map->map_char[i])
-		printf("%s\n", map->map_char[i++]);
 }
 
 int	main(int argc, char **argv)
@@ -177,25 +96,13 @@ int	main(int argc, char **argv)
 	t_draw_info	draw_info;
 	t_img		img;
 
-	set_player(&player);
-	map.player = &player;
-	map.move_speed = 0.5;
-	map.rot_speed = 0.3;
-	map.img = &img;
-	map.dda = &dda;
-	map.dda->pitch = 100;
 	map.draw_info = &draw_info;
-
+	set_pro_attri(&map, &player, &img, &dda);
 	if (!*(++argv) || argc == 1)
 		return (0);
 	if (!valid_argv(argv))
 		ft_error(E_MAP_VAL);
-	map.fd = open(*(argv), O_RDONLY);
-	if (map.fd <= 0)
-		ft_error(E_FD);
-	init_map(&map, map.fd, 0);
-	search_arg(&map, map.x -1, 0);
-	map_valid_check(&map, 6, -1);
+	check(&map, argv);
 	map.mlx = mlx_init();
 	if (!map.mlx)
 		return (0);
@@ -203,6 +110,5 @@ int	main(int argc, char **argv)
 	if (!map.win)
 		return (0);
 	map.map_char += 6;
-	print_map(&map);
 	drow_window(&map);
 }
