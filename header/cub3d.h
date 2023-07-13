@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/12 17:35:14 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/13 19:25:43 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ typedef struct s_map
 	int				t_i;
 	int				t_j;
 	int				buf[720][1280];
+	t_img_minimap	minimap;
 }					t_map;
 
 /* ===============../src=============== */
@@ -149,12 +150,11 @@ void				*ft_memset(void *b, int c, size_t len);
 
 // draw_map.c
 int					create_rgb(int r, int g, int b);
-void				my_mlx_pixel_put(t_img_minimap *minimap, int x, int y,
-						int color);
-void				pixel_put_while(t_img_minimap *minimap, unsigned int w,
+void				my_mlx_pixel_put(t_map *map, int x, int y, int color);
+void				pixel_put_while(t_map *map, unsigned int w,
 						unsigned int h, int color);
-void				set_minimap(t_map *map, t_img_minimap *minimap);
-void				draw_map(t_map *map);
+void				set_minimap(t_map *map);
+int					draw_map(t_map *map);
 void				init_img(t_map *map);
 void				get_map_line_max(t_map *map);
 int					get_pixel_size(t_map *map);
@@ -163,7 +163,7 @@ void				set_texture(t_map *map);
 int					raycasting(t_map *map);
 void				set_player(t_player *player);
 
-void				reset_buffer(int **buffer);
+void				reset_buffer(t_map *map);
 void				set_texture(t_map *map);
 void				set_dda_attribute(t_DDA *dda, t_player *player,
 						double ray_dir_x, double ray_dir_y);
