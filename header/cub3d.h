@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/13 19:25:43 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/13 21:28:54 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,4 +180,8 @@ void				set_pro_attri(t_map *map, t_player *player, t_img *img,
 int					create_rgb(int r, int g, int b);
 int					get_pixel_size(t_map *map);
 int					set_tex_num(t_map *map, double ray_dir_x, double ray_dir_y);
+
+void				set_direction_ew(t_map *map, char direction);
+void				set_direction_sn(t_map *map, char direction);
+
 #endif

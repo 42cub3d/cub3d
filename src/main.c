@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/13 19:28:22 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/13 21:27:36 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ void	map_valid_check(t_map *map, unsigned int std, unsigned int j,
 			{
 				map->player->pos_x = i + 0.5;
 				map->player->pos_y = j + 0.5;
+				set_direction_ew(map, map->map_char[i + std][j]);
+				set_direction_sn(map, map->map_char[i + std][j]);
 				map->is_player_in_map = 1;
 				map->map_char[i + std][j] = '0';
 			}
