@@ -6,20 +6,20 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 15:55:15 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/12 17:37:06 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/13 19:13:36 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/cub3d.h"
 
-void	draw_buffer(int x, t_map *map, int **buffer)
+void	draw_buffer(int x, t_map *map)
 {
 	int	i;
 
 	i = map->draw_info->draw_start;
 	while (i < map->draw_info->draw_end)
 	{
-		map->img->addr[screenWidth * i + x] = buffer[i][x];
+		map->img->addr[screenWidth * i + x] = map->buf[i][x];
 		i++;
 	}
 	i = 0;
@@ -70,12 +70,12 @@ void	set_color(int x, t_draw_info *draw_info, t_map *map, int tex_num)
 		color = map->texture[tex_num].addr[texHeight * tex_y + map->dda->tex_x];
 		if (map->dda->side == 1)
 			color = (color >> 1) & 8355711;
-		buffer[i][x] = color;
+		map->buf[i][x] = color;
 		i++;
 	}
 }
 
-void	ray_loop(t_map *map, int i, int **buffer)
+void	ray_loop(t_map *map, int i)
 {
 	double	ray_dir_x;
 	double	ray_dir_y;
@@ -97,22 +97,22 @@ void	ray_loop(t_map *map, int i, int **buffer)
 	tex_num = set_tex_num(map, ray_dir_x, ray_dir_y);
 	calculate_wall_texture(map, ray_dir_x, ray_dir_y);
 	set_color(i, map->draw_info, map, tex_num);
-	draw_buffer(i, map, buffer);
+	draw_buffer(i, map);
 }
 
 int	raycasting(t_map *map)
 {
 	int		i;
-	int		buffer[720][1280];
 
 	i = -1;
 	map->img->img = mlx_new_image(map->mlx, screenWidth, screenHeight);
 	map->img->addr = (unsigned int *)mlx_get_data_addr(map->img->img,
 			&map->img->bits_per_pixel, &map->img->line_len, &map->img->endian);
 	while (++i < screenWidth)
-		ray_loop(map, i, buffer);
+		ray_loop(map, i);
 	mlx_put_image_to_window(map->mlx, map->win, map->img->img, 0, 0);
 	mlx_destroy_image(map->mlx, map->img->img);
-	reset_buffer(buffer);
+	reset_buffer(map);
+	//draw_map(map);
 	return (0);
 }

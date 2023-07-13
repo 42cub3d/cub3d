@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:30:46 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/12 17:29:41 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/13 19:17:13 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	set_player(t_player *player)
 	player->plane_y = 0.66;
 }
 
-void	reset_buffer(int **buffer)
+void	reset_buffer(t_map *map)
 {
 	int	i;
 	int	j;
@@ -39,7 +39,7 @@ void	reset_buffer(int **buffer)
 		j = 0;
 		while (j < screenWidth)
 		{
-			buffer[i][j] = 0;
+			map->buf[i][j] = 0;
 			j++;
 		}
 		i++;

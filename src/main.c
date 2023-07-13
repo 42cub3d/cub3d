@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/12 17:20:47 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/13 19:28:22 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	drow_window(t_map *map)
 {
 	(void)map;
 	set_texture(map);
-	//draw_map(map);
 	mlx_loop_hook(map->mlx, raycasting, map);
+//	mlx_loop_hook(map->mlx, draw_map, map);
 	mlx_hook(map->win, X_EVENT_KEY_PRESS, 0, press_key, map);
 	mlx_hook(map->win, X_EVENT_KEY_EXIT, 0, exit_game, map);
 	mlx_loop(map->mlx);
@@ -88,6 +88,11 @@ void	map_valid_check(t_map *map, unsigned int std, unsigned int j,
 		ft_error(E_MAP_COLSED);
 }
 
+void f()
+{
+	system("leaks cub3D");
+}
+
 int	main(int argc, char **argv)
 {
 	t_map		map;
@@ -96,6 +101,7 @@ int	main(int argc, char **argv)
 	t_draw_info	draw_info;
 	t_img		img;
 
+	//atexit(f);
 	map.draw_info = &draw_info;
 	set_pro_attri(&map, &player, &img, &dda);
 	if (!*(++argv) || argc == 1)
