@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/13 21:27:36 by subcho           ###   ########.fr       */
+/*   Updated: 2023/07/16 23:09:10 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,28 @@ void	drow_window(t_map *map)
 
 bool	check_condition(t_map *map, char **em, int i, int j)
 {
+	// 0,0
+	// array index out of bound
+
+	if (i + map->t_i + 1> (int)map->x)
+		return (0);
 	if (i + map->t_i < 0 || j + map->t_j < 0 || (map->t_i
-			== 0 && map->t_j == 0) || em[i + map->t_i][j
-		+ map->t_j] == 0 || j + map->t_j == (int)map->x + 2)
+			== 0 && map->t_j == 0) || em[i + map->t_i] == 0 ||
+			em[i + map->t_i][j + map->t_j] == 0)//|| j + map->t_j == (int)map->x + 2)
+	{
 		return (1);
+	}
 	return (0);
 }
 
 int	check_closed(t_map *map, char **em, int i, int j)
 {
-	while (++i < (int)map->x)
+	while (++i < (int)map->x + 2)
 	{
 		j = -1;
 		while (em[i][++j])
 		{
+			printf("%c", em[i][j]);
 			if (em[i][j] == 'x')
 			{
 				map->t_i = -2;
@@ -47,15 +55,22 @@ int	check_closed(t_map *map, char **em, int i, int j)
 					map->t_j = -2;
 					while (++map->t_j < 2)
 					{
+						//14,31
+						//if (i == 12 && j == 29)
 						if (check_condition(map, em, i, j))
 							continue ;
 						else if (em[i + map->t_i][j + map->t_j] != '1'
 							&& em[i + map->t_i][j + map->t_j] != 'x')
+						{
+							printf("%c %c", em[i + map->t_i][j + map->t_j], em[i][j]);
 							return (1);
+						}
 					}
 				}
 			}
+			
 		}
+		printf("\n");
 	}
 	return (0);
 }
@@ -86,7 +101,7 @@ void	map_valid_check(t_map *map, unsigned int std, unsigned int j,
 				return ;
 		}
 	}
-	if (check_closed(map, make_expand_map(map, 0, 0), 0, 0))
+	if (check_closed(map, make_expand_map(map, 0, 0), -1, 0))
 		ft_error(E_MAP_COLSED);
 }
 

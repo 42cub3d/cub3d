@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:30:46 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/13 20:29:12 by subcho           ###   ########.fr       */
+/*   Updated: 2023/07/14 20:01:27 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	set_pro_attri(t_map *map, t_player *player, t_img *img, t_DDA *dda)
 	set_player(player);
 	map->player = player;
 	map->move_speed = 0.1;
-	map->rot_speed = 0.3;
+	map->rot_speed = 0.1;
 	map->img = img;
 	map->dda = dda;
 	map->dda->pitch = 100;
