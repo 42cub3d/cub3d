@@ -6,7 +6,7 @@
 /*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 15:55:15 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/13 21:30:31 by subcho           ###   ########.fr       */
+/*   Updated: 2023/07/17 17:54:26 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,15 @@ void	draw_buffer(int x, t_map *map)
 	i = 0;
 	while (i < map->draw_info->draw_start)
 	{
-		map->img->addr[screenWidth * i + x] = create_rgb(255, 230, 0);
+		map->img->addr[screenWidth * i + x] = create_rgb(map->ceiling_color[0],
+				map->ceiling_color[1], map->ceiling_color[2]);
 		i++;
 	}
 	i = map->draw_info->draw_end;
 	while (i + 1 < screenHeight)
 	{
-		map->img->addr[screenWidth * i + x] = create_rgb(255, 192, 203);
+		map->img->addr[screenWidth * i + x] = create_rgb(map->floor_color[0],
+				map->floor_color[1], map->floor_color[2]);
 		i++;
 	}
 }
