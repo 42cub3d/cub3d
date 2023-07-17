@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 17:11:33 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/16 22:54:28 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/17 17:14:43 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ void	print_map(char **map, int x)
 
 	i = -1;
 	while (++i < x)
+	{
+		printf("i : %d\n", i);
 		printf("%s\n", map[i]);
+	}
 }
 
 char	**make_expand_map(t_map *map, int i, int j)
@@ -73,7 +76,6 @@ char	**make_expand_map(t_map *map, int i, int j)
 				expand_map[i][j] = 'x';
 		}
 	}
-	print_map(expand_map, map->x + 2);
 	return (expand_map);
 }
 

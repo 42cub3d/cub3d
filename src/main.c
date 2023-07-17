@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/16 23:09:10 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/17 17:14:56 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,14 @@ bool	check_condition(t_map *map, char **em, int i, int j)
 {
 	// 0,0
 	// array index out of bound
-
-	if (i + map->t_i + 1> (int)map->x)
-		return (0);
-	if (i + map->t_i < 0 || j + map->t_j < 0 || (map->t_i
-			== 0 && map->t_j == 0) || em[i + map->t_i] == 0 ||
-			em[i + map->t_i][j + map->t_j] == 0)//|| j + map->t_j == (int)map->x + 2)
-	{
+	if (i + map->t_i < 0 || j + map->t_j < 0)
 		return (1);
-	}
+	if (i + map->t_i > (int)map->x)
+		return (1);
+	if (em[i + map->t_i][j + map->t_j] == 0)
+		return (1);
+	if ((map->t_i == 0 && map->t_j == 0) || em[i + map->t_i] == 0)
+		return (1);
 	return (0);
 }
 
@@ -46,7 +45,6 @@ int	check_closed(t_map *map, char **em, int i, int j)
 		j = -1;
 		while (em[i][++j])
 		{
-			printf("%c", em[i][j]);
 			if (em[i][j] == 'x')
 			{
 				map->t_i = -2;
@@ -55,22 +53,15 @@ int	check_closed(t_map *map, char **em, int i, int j)
 					map->t_j = -2;
 					while (++map->t_j < 2)
 					{
-						//14,31
-						//if (i == 12 && j == 29)
 						if (check_condition(map, em, i, j))
 							continue ;
 						else if (em[i + map->t_i][j + map->t_j] != '1'
 							&& em[i + map->t_i][j + map->t_j] != 'x')
-						{
-							printf("%c %c", em[i + map->t_i][j + map->t_j], em[i][j]);
 							return (1);
-						}
 					}
 				}
 			}
-			
 		}
-		printf("\n");
 	}
 	return (0);
 }
