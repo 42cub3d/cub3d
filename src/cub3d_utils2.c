@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 17:11:33 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/12 17:18:23 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/17 17:14:43 by subcho           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,29 @@ void	check(t_map *map, char **argv)
 		ft_error(E_MAP_VAL);
 }
 
+void	print_map(char **map, int x)
+{
+	int	i;
+
+	i = -1;
+	while (++i < x)
+	{
+		printf("i : %d\n", i);
+		printf("%s\n", map[i]);
+	}
+}
+
 char	**make_expand_map(t_map *map, int i, int j)
 {
 	char	**expand_map;
 
-	expand_map = malloc(sizeof(char *) * (map->x + 2) + 1);
+	expand_map = malloc(sizeof(char *) * (map->x + 3));
 	map->max_map_line = find_longest_line(map);
 	expand_map[0] = malloc(sizeof(char) * map->max_map_line + 3);
 	ft_memset(expand_map[0], 'x', map->max_map_line + 3);
 	expand_map[0][map->max_map_line + 2] = 0;
 	expand_map[map->x + 1] = malloc(sizeof(char) * map->max_map_line + 3);
+	expand_map[map->x + 2] = 0;
 	ft_memset(expand_map[map->x + 1], 'x', map->max_map_line + 3);
 	expand_map[map->x + 1][map->max_map_line + 2] = 0;
 	while (++i <= (int)map->x)
