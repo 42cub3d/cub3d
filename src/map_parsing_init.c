@@ -6,23 +6,39 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:29:27 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/12 17:25:10 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/19 18:06:25 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/cub3d.h"
 
-int	init_arg(t_map *map, int i)
+int	set_default_color(t_map *map, char *tmp, int i, int digit)
 {
 	char	**tmp_rgb;
 
-	tmp_rgb = ft_split(map->map_argv[4], ',');
+	tmp_rgb = ft_split(tmp, ',');
+	if (tmp_rgb[3] != 0 || tmp_rgb[0] == 0 || tmp_rgb[1] == 0
+		|| tmp_rgb[2] == 0)
+		ft_error(PARSINGERR);
 	while (++i < 3)
-		map->floor_color[i] = ft_atoi(tmp_rgb[i]);
-	i = -1;
-	tmp_rgb = ft_split(map->map_argv[5], ',');
-	while (++i < 3)
-		map->ceiling_color[i] = ft_atoi(tmp_rgb[i]);
+	{
+		if (digit)
+			map->floor_color[i] = ft_atoi(tmp_rgb[i]);
+		else
+			map->ceiling_color[i] = ft_atoi(tmp_rgb[i]);
+		if (map->floor_color[i] < 0 || map->floor_color[i] > 255)
+			ft_error(PARSINGERR);
+	}
+	while (i--)
+		free(tmp_rgb[i]);
+	free(tmp_rgb);
+	return (0);
+}
+
+int	init_arg(t_map *map)
+{
+	set_default_color(map, map->map_argv[4], -1, 1);
+	set_default_color(map, map->map_argv[5], -1, 0);
 	return (0);
 }
 
@@ -47,7 +63,7 @@ int	search_arg(t_map *map, int i, int j)
 	}
 	if (i != -1)
 		return (1);
-	return (init_arg(map, -1));
+	return (init_arg(map));
 }
 
 void	init_map(t_map *map, int fd, int cnt)
@@ -58,7 +74,10 @@ void	init_map(t_map *map, int fd, int cnt)
 	if (cnt == 0 && !line)
 		ft_error(PARSINGERR);
 	while (line && *line == '\n')
+	{
+		free(line);
 		line = get_next_line(fd);
+	}
 	if (!line)
 	{
 		map->map_char = malloc(sizeof(char *) * (cnt + 1));

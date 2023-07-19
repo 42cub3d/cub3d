@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/17 17:14:56 by subcho           ###   ########.fr       */
+/*   Updated: 2023/07/19 17:46:37 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,14 @@ bool	check_condition(t_map *map, char **em, int i, int j)
 	return (0);
 }
 
+int	ft_free_expand_map(char **em, int i)
+{
+	while (em[++i])
+		free(em[i]);
+	free(em);
+	return (0);
+}
+
 int	check_closed(t_map *map, char **em, int i, int j)
 {
 	while (++i < (int)map->x + 2)
@@ -63,7 +71,7 @@ int	check_closed(t_map *map, char **em, int i, int j)
 			}
 		}
 	}
-	return (0);
+	return (ft_free_expand_map(em, -1));
 }
 
 void	map_valid_check(t_map *map, unsigned int std, unsigned int j,
@@ -83,6 +91,8 @@ void	map_valid_check(t_map *map, unsigned int std, unsigned int j,
 				map->player->pos_y = j + 0.5;
 				set_direction_ew(map, map->map_char[i + std][j]);
 				set_direction_sn(map, map->map_char[i + std][j]);
+				if (map->is_player_in_map)
+					ft_error(E_MAP_PLAYER);
 				map->is_player_in_map = 1;
 				map->map_char[i + std][j] = '0';
 			}
@@ -101,6 +111,16 @@ void f()
 	system("leaks cub3D");
 }
 
+//void ft_free(t_map *map)
+//{
+//	int i;
+
+//	i = -1;
+//	free(map->floor_color);
+//	free(map->ceiling_color);
+//	free(map->map_argv);
+//}
+
 int	main(int argc, char **argv)
 {
 	t_map		map;
@@ -109,7 +129,7 @@ int	main(int argc, char **argv)
 	t_draw_info	draw_info;
 	t_img		img;
 
-	//atexit(f);
+	atexit(f);
 	map.draw_info = &draw_info;
 	set_pro_attri(&map, &player, &img, &dda);
 	if (!*(++argv) || argc == 1)
@@ -125,4 +145,5 @@ int	main(int argc, char **argv)
 		return (0);
 	map.map_char += 6;
 	drow_window(&map);
+	//ft_free(&map);
 }

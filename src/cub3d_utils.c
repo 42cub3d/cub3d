@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:30:46 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/14 20:01:27 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/19 17:44:53 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,15 @@ int	valid_argv(char **argv)
 	while (split[len])
 		len++;
 	if (!ft_strncmp(split[len - 1], "cub", 4))
+	{
+		while (len)
+			free(split[--len]);
+		free(split);
 		return (1);
+	}
+	while (len)
+		free(split[--len]);
+	free(split);
 	return (0);
 }
 

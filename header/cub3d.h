@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/13 21:28:54 by subcho           ###   ########.fr       */
+/*   Updated: 2023/07/19 17:31:57 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define E_FD "MAP OEPN FAILED"
 # define PARSINGERR "PARSING FAILED"
 # define E_MAP_COLSED "MAP IS NOT COLSED"
+# define E_MAP_PLAYER "PLAYER IS NOT ONE"
 
 # define texWidth 64
 # define texHeight 64
@@ -140,7 +141,7 @@ void				drow_window(t_map *map);
 int					valid_argv(char **argv);
 void				map_valid_check(t_map *map, unsigned int std,
 						unsigned int j, unsigned int i);
-int					init_arg(t_map *map, int i);
+int					init_arg(t_map *map);
 int					search_arg(t_map *map, int i, int j);
 void				init_map(t_map *map, int fd, int cnt);
 void				ft_putstr_fd(char *s, int fd);
@@ -183,5 +184,5 @@ int					set_tex_num(t_map *map, double ray_dir_x, double ray_dir_y);
 
 void				set_direction_ew(t_map *map, char direction);
 void				set_direction_sn(t_map *map, char direction);
-
+int	set_default_color(t_map *map, char *tmp, int i, int digit);
 #endif
