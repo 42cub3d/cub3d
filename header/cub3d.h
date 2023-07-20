@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/19 17:31:57 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/20 18:08:24 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@
 # define E_MAP_COLSED "MAP IS NOT COLSED"
 # define E_MAP_PLAYER "PLAYER IS NOT ONE"
 
-# define texWidth 64
-# define texHeight 64
-# define screenWidth 1280
-# define screenHeight 720
+# define TEXWIDTH 64
+# define TEXHEIGHT 64
+# define SCREENWIDTH 1280
+# define SCREENHEIGHT 720
 
 # define X_EVENT_KEY_PRESS 2
 # define X_EVENT_KEY_RELEASE 3
@@ -152,8 +152,8 @@ void				*ft_memset(void *b, int c, size_t len);
 // draw_map.c
 int					create_rgb(int r, int g, int b);
 void				my_mlx_pixel_put(t_map *map, int x, int y, int color);
-void				pixel_put_while(t_map *map, unsigned int w,
-						unsigned int h, int color);
+void				pixel_put_while(t_map *map, unsigned int w, unsigned int h,
+						int color);
 void				set_minimap(t_map *map);
 int					draw_map(t_map *map);
 void				init_img(t_map *map);
@@ -184,5 +184,8 @@ int					set_tex_num(t_map *map, double ray_dir_x, double ray_dir_y);
 
 void				set_direction_ew(t_map *map, char direction);
 void				set_direction_sn(t_map *map, char direction);
-int	set_default_color(t_map *map, char *tmp, int i, int digit);
+int					set_default_color(t_map *map, char *tmp, int i, int digit);
+int					ft_free_expand_map(char **em, int i);
+void				set_player_attri(t_map *map, int i, int j,
+						unsigned int std);
 #endif
