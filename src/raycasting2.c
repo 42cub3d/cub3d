@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 16:08:49 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/12 16:09:51 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/20 18:08:18 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,15 +98,15 @@ void	do_dda(t_DDA *dda, t_map *map)
 
 void	set_draw_info(t_map *map)
 {
-	map->draw_info->line_height = (int)(screenHeight
+	map->draw_info->line_height = (int)(SCREENHEIGHT
 			/ map->dda->perp_wall_dist);
-	map->draw_info->draw_start = -map->draw_info->line_height / 2 + screenHeight
+	map->draw_info->draw_start = -map->draw_info->line_height / 2 + SCREENHEIGHT
 		/ 2 + map->dda->pitch;
 	if (map->draw_info->draw_start < 0)
 		map->draw_info->draw_start = 0;
-	map->draw_info->draw_end = map->draw_info->line_height / 2 + screenHeight
+	map->draw_info->draw_end = map->draw_info->line_height / 2 + SCREENHEIGHT
 		/ 2 + map->dda->pitch;
-	if (map->draw_info->draw_end >= screenHeight
+	if (map->draw_info->draw_end >= SCREENHEIGHT
 		|| map->draw_info->draw_end < 0)
-		map->draw_info->draw_end = screenHeight - 1;
+		map->draw_info->draw_end = SCREENHEIGHT - 1;
 }

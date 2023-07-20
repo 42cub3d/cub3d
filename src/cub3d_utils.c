@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:30:46 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/14 20:01:27 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/20 18:08:18 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ void	reset_buffer(t_map *map)
 	int	j;
 
 	i = 0;
-	while (i < screenHeight)
+	while (i < SCREENHEIGHT)
 	{
 		j = 0;
-		while (j < screenWidth)
+		while (j < SCREENWIDTH)
 		{
 			map->buf[i][j] = 0;
 			j++;
@@ -56,7 +56,15 @@ int	valid_argv(char **argv)
 	while (split[len])
 		len++;
 	if (!ft_strncmp(split[len - 1], "cub", 4))
+	{
+		while (len)
+			free(split[--len]);
+		free(split);
 		return (1);
+	}
+	while (len)
+		free(split[--len]);
+	free(split);
 	return (0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: subcho <subcho@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/17 17:14:56 by subcho           ###   ########.fr       */
+/*   Updated: 2023/07/20 18:08:18 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	drow_window(t_map *map)
 	(void)map;
 	set_texture(map);
 	mlx_loop_hook(map->mlx, raycasting, map);
-//	mlx_loop_hook(map->mlx, draw_map, map);
 	mlx_hook(map->win, X_EVENT_KEY_PRESS, 0, press_key, map);
 	mlx_hook(map->win, X_EVENT_KEY_EXIT, 0, exit_game, map);
 	mlx_loop(map->mlx);
@@ -25,8 +24,6 @@ void	drow_window(t_map *map)
 
 bool	check_condition(t_map *map, char **em, int i, int j)
 {
-	// 0,0
-	// array index out of bound
 	if (i + map->t_i < 0 || j + map->t_j < 0)
 		return (1);
 	if (i + map->t_i > (int)map->x)
@@ -63,7 +60,7 @@ int	check_closed(t_map *map, char **em, int i, int j)
 			}
 		}
 	}
-	return (0);
+	return (ft_free_expand_map(em, -1));
 }
 
 void	map_valid_check(t_map *map, unsigned int std, unsigned int j,
@@ -78,27 +75,15 @@ void	map_valid_check(t_map *map, unsigned int std, unsigned int j,
 				+ std][j] == 'S' ||
 				map->map_char[i + std][j] == 'E' || map->map_char[i
 					+ std][j] == 'W')
-			{
-				map->player->pos_x = i + 0.5;
-				map->player->pos_y = j + 0.5;
-				set_direction_ew(map, map->map_char[i + std][j]);
-				set_direction_sn(map, map->map_char[i + std][j]);
-				map->is_player_in_map = 1;
-				map->map_char[i + std][j] = '0';
-			}
+				set_player_attri(map, i, j, std);
 			else if (map->map_char[i + std][j] != ' ' && map->map_char[i
 					+ std][j] != '\n' && map->map_char[i + std][j] != '0'
 					&& map->map_char[i + std][j] != '1')
-				return ;
+				ft_error(E_MAP_VAL);
 		}
 	}
 	if (check_closed(map, make_expand_map(map, 0, 0), -1, 0))
 		ft_error(E_MAP_COLSED);
-}
-
-void f()
-{
-	system("leaks cub3D");
 }
 
 int	main(int argc, char **argv)
@@ -109,7 +94,6 @@ int	main(int argc, char **argv)
 	t_draw_info	draw_info;
 	t_img		img;
 
-	//atexit(f);
 	map.draw_info = &draw_info;
 	set_pro_attri(&map, &player, &img, &dda);
 	if (!*(++argv) || argc == 1)
@@ -120,7 +104,7 @@ int	main(int argc, char **argv)
 	map.mlx = mlx_init();
 	if (!map.mlx)
 		return (0);
-	map.win = mlx_new_window(map.mlx, screenWidth, screenHeight, "cub3d");
+	map.win = mlx_new_window(map.mlx, SCREENWIDTH, SCREENHEIGHT, "cub3d");
 	if (!map.win)
 		return (0);
 	map.map_char += 6;
