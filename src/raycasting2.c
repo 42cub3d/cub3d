@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 16:08:49 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/20 18:08:18 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/22 16:31:46 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	set_texture(t_map *map)
 	i = 0;
 	while (i < 4)
 	{
+		if ((map->texture)[i].img == NULL)
+			ft_error(E_IMAGE_OPEN);
 		(map->texture)[i].addr = (unsigned int *)mlx_get_data_addr(
 				(map->texture)[i].img, &(map->texture)[i].bits_per_pixel,
 				&(map->texture)[i].line_len, &(map->texture)[i].endian);

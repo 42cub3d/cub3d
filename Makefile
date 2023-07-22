@@ -1,14 +1,12 @@
 CC=cc
-CFLAGS=-Wall -Wextra -Werror -g #-fsanitize=address
+CFLAGS=-Wall -Wextra -Werror -g -fsanitize=address
 LMLX=-L./minilibx -lmlx -framework OpenGL -framework AppKit
 LIBFT=./libft/libft.a
 HEADER=-I./header
 NAME=cub3D
 SRCS=./src/main.c\
-		./src/draw_map.c\
 		./src/str_utils.c\
 		./src/map_parsing_init.c\
-		./src/key_hook.c\
 		./src/key_press.c\
 		./src/cub3d_utils.c\
 		./src/cub3d_utils2.c\

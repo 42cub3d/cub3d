@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:08:31 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/20 18:08:24 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/22 18:00:41 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,12 @@
 # include <unistd.h>
 
 # define E_MAP_VAL "MAP ELEMENT IS NOT SUPOSSED TO BE"
-# define E_FD "MAP OEPN FAILED"
+# define E_FD "MAP OPEN FAILED"
 # define PARSINGERR "PARSING FAILED"
 # define E_MAP_COLSED "MAP IS NOT COLSED"
 # define E_MAP_PLAYER "PLAYER IS NOT ONE"
+# define E_IMAGE_OPEN "IMAGE OPEN FAILED"
+# define E_EXTENSION "EXTENSION IS NOT SUPOSSED TO BE"
 
 # define TEXWIDTH 64
 # define TEXHEIGHT 64
@@ -84,10 +86,6 @@ typedef struct s_DDA
 	double			wall_x;
 }					t_DDA;
 
-typedef struct s_img_info
-{
-}					t_img_info;
-
 typedef struct s_img
 {
 	void			*img;
@@ -132,39 +130,40 @@ typedef struct s_map
 /* ===============../src=============== */
 
 void				ft_error(char *strerr);
-int					exit_game(t_map *map);
+void				set_player(t_player *player);
+void				reset_buffer(t_map *map);
+void				set_pro_attri(t_map *map, t_player *player, t_img *img,
+						t_DDA *dda);
+int					find_longest_line(t_map *map);
+void				check(t_map *map, char **argv);
+char				**make_expand_map(t_map *map, int i, int j);
+int					create_rgb(int r, int g, int b);
+void				set_direction_ew(t_map *map, char direction);
+void				set_direction_sn(t_map *map, char direction);
+int					ft_free_expand_map(char **em, int i);
+void				set_player_attri(t_map *map, int i, int j,
+						unsigned int std);
+void				press_key3(int key_code, t_map *map, double old_dir_x,
+						double old_plane_x);
+void				press_key2(int key_code, t_map *map);
 int					press_key(int key_code, t_map *map);
-void				next_mom(t_map *map, unsigned int *x, unsigned int *y,
-						int key);
-void				move(t_map *map, int key);
+int					exit_game(t_map *map);
 void				drow_window(t_map *map);
-int					valid_argv(char **argv);
+bool				check_condition(t_map *map, char **em, int i, int j);
+int					check_closed(t_map *map, char **em, int i, int j);
 void				map_valid_check(t_map *map, unsigned int std,
 						unsigned int j, unsigned int i);
+int					set_default_color(t_map *map, char *tmp, int i, int digit);
 int					init_arg(t_map *map);
 int					search_arg(t_map *map, int i, int j);
 void				init_map(t_map *map, int fd, int cnt);
-void				ft_putstr_fd(char *s, int fd);
-int					ft_strncmp(const char *s1, const char *s2, size_t n);
-void				*ft_calloc(size_t count, size_t size);
-void				*ft_memset(void *b, int c, size_t len);
-
-// draw_map.c
-int					create_rgb(int r, int g, int b);
-void				my_mlx_pixel_put(t_map *map, int x, int y, int color);
-void				pixel_put_while(t_map *map, unsigned int w, unsigned int h,
-						int color);
-void				set_minimap(t_map *map);
-int					draw_map(t_map *map);
-void				init_img(t_map *map);
-void				get_map_line_max(t_map *map);
-int					get_pixel_size(t_map *map);
-
-void				set_texture(t_map *map);
+void				draw_buffer(int x, t_map *map);
+void				calculate_wall_texture(t_map *map, double ray_dir_x,
+						double ray_dir_y);
+void				set_color(int x, t_draw_info *draw_info, t_map *map,
+						int tex_num);
+void				ray_loop(t_map *map, int i);
 int					raycasting(t_map *map);
-void				set_player(t_player *player);
-
-void				reset_buffer(t_map *map);
 void				set_texture(t_map *map);
 void				set_dda_attribute(t_DDA *dda, t_player *player,
 						double ray_dir_x, double ray_dir_y);
@@ -172,20 +171,11 @@ void				set_dda(t_DDA *dda, t_player *player, double ray_dir_x,
 						double ray_dir_y);
 void				do_dda(t_DDA *dda, t_map *map);
 void				set_draw_info(t_map *map);
-
-int					find_longest_line(t_map *map);
-void				check(t_map *map, char **argv);
-char				**make_expand_map(t_map *map, int i, int j);
-void				set_pro_attri(t_map *map, t_player *player, t_img *img,
-						t_DDA *dda);
-int					create_rgb(int r, int g, int b);
-int					get_pixel_size(t_map *map);
 int					set_tex_num(t_map *map, double ray_dir_x, double ray_dir_y);
-
-void				set_direction_ew(t_map *map, char direction);
-void				set_direction_sn(t_map *map, char direction);
-int					set_default_color(t_map *map, char *tmp, int i, int digit);
-int					ft_free_expand_map(char **em, int i);
-void				set_player_attri(t_map *map, int i, int j,
-						unsigned int std);
+void				ft_putstr_fd(char *s, int fd);
+int					ft_strncmp(const char *s1, const char *s2, size_t n);
+void				*ft_calloc(size_t count, size_t size);
+void				*ft_memset(void *b, int c, size_t len);
+int					str_count(char *str, char c);
+int					check_extension(char *argv, char *ext);
 #endif

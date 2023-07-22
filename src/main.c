@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 17:01:47 by subcho            #+#    #+#             */
-/*   Updated: 2023/07/20 18:08:18 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/22 18:51:39 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ bool	check_condition(t_map *map, char **em, int i, int j)
 	if (i + map->t_i < 0 || j + map->t_j < 0)
 		return (1);
 	if (i + map->t_i > (int)map->x)
+		return (1);
+	if (j + map->t_j > (int)ft_strlen(em[i + map->t_i]))
 		return (1);
 	if (em[i + map->t_i][j + map->t_j] == 0)
 		return (1);
@@ -98,7 +100,7 @@ int	main(int argc, char **argv)
 	set_pro_attri(&map, &player, &img, &dda);
 	if (!*(++argv) || argc == 1)
 		return (0);
-	if (!valid_argv(argv))
+	if (!check_extension(*argv, "cub"))
 		ft_error(E_MAP_VAL);
 	check(&map, argv);
 	map.mlx = mlx_init();
