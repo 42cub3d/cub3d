@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:57:01 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/12 17:20:33 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/22 15:49:29 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,10 @@ int	press_key(int key_code, t_map *map)
 	}
 	press_key2(key_code, map);
 	return (0);
+}
+
+int	exit_game(t_map *map)
+{
+	mlx_destroy_window(map->mlx, map->win);
+	exit(0);
 }

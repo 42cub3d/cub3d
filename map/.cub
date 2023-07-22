@@ -1,12 +1,11 @@
 
-F 0,0,0
+F 220,9,111
+C 225,0,255
 
 NO             ./image/NO.xpm
 SO                   ./image/SO.xpm      
-C 225,0,255
 WE ./image/WE.xpm
 EA ./image/EA.xpm
-
 
 1111111
 1100N01

@@ -6,7 +6,7 @@
 /*   By: gkwon <gkwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:30:46 by gkwon             #+#    #+#             */
-/*   Updated: 2023/07/20 18:08:18 by gkwon            ###   ########.fr       */
+/*   Updated: 2023/07/22 18:05:13 by gkwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,25 +46,26 @@ void	reset_buffer(t_map *map)
 	}
 }
 
-int	valid_argv(char **argv)
+int	check_extension(char *argv, char *ext)
 {
 	char	**split;
 	int		len;
 
 	len = 0;
-	split = ft_split(*argv, '.');
+	split = ft_split(argv, '.');
 	while (split[len])
 		len++;
-	if (!ft_strncmp(split[len - 1], "cub", 4))
+	if (!ft_strncmp(ext, "cub", 4) && ft_strchr(split[0], '/'))
+		if (!*(ft_strchr(split[0], '/') + 1))
+			ft_error(E_EXTENSION);
+	if (!ft_strncmp(split[len - 1], ext, ft_strlen(ext) + 1))
 	{
 		while (len)
 			free(split[--len]);
 		free(split);
 		return (1);
 	}
-	while (len)
-		free(split[--len]);
-	free(split);
+	ft_error(E_EXTENSION);
 	return (0);
 }
 
